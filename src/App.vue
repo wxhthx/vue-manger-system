@@ -21,4 +21,5 @@ export default {
 * 引入css基础框架bootstrap和自定义css基础框架
 */
 @import './assets/sass/bootstrap/bootstrap.scss';
+@import './assets/sass/custommade/main.scss';
 </style>

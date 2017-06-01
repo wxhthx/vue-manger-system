@@ -1,14 +1,21 @@
 <template lang="pug">
-  div.container-fluid
+  div.width_flud
     header.row.plat-header
-    div.content {{overview}}
+      plat-header
+    plat-content
 </template>
 <script>
+import Header from '../header/Header'
+import Content from '../content/Content'
 export default {
   data () {
     return {
         overview: 'overview coming'
     }
+  },
+  components: {
+    'plat-header': Header,
+    'plat-content': Content
   }
 }
 </script>

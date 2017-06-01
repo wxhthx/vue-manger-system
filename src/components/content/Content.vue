@@ -1,18 +1,19 @@
 <template lang="pug">
-    div.full-container
-        div.col-xl-6
+    div.container-fluid
+        div.col-xl-2.inline-block.text-left
             plat-navbar
-        router-view
+        div.col-xl-10.inline-block
+            router-view
 </template>
 <script>
-import Navbar from './navbar/Navbar'
+import Navbar from '../navbar/Navbar'
 export default {
   data () {
     return {
         content: 'hello'
     }
   },
-  component: {
+  components: {
       'plat-navbar': Navbar
   }
 }

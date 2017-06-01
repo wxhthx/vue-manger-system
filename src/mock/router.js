@@ -1,9 +1,14 @@
 import Overview from '@/components/overview/Overview'
 import Login from '@/components/login/Login'
-
-export const Navbar = [
+import Admin from '@/components/admin/Admin'
+export const RouterData = [
     {
       path: '/',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/login',
       name: 'login',
       component: Login
     },
@@ -13,9 +18,9 @@ export const Navbar = [
         component: Overview,
         children: [
             {
-                path: 'overview',
-                name: 'overview',
-                component: Overview
+                path: 'admin',
+                name: 'admin',
+                component: Admin              
             }
         ]
     }

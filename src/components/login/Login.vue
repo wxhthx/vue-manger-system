@@ -28,7 +28,7 @@ export default {
   },
   methods: {
      submit: function () {
-         this.$router.push('/plat/overview')
+         this.$router.push('/plat/admin')
      },
      register: function () {
         //  this.$router.push('/register')
