@@ -1,5 +1,5 @@
 <template lang="pug">
-    div.container-fluid
+    div.width_flud
         div.col-xl-2.inline-block.text-left
             plat-navbar
         div.col-xl-10.inline-block

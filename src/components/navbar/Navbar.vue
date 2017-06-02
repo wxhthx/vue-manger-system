@@ -1,12 +1,12 @@
 <template lang="pug">
     div.width_flud
-        ul.navbar
-            li(v-for="(primaryItem, primaryIndex) in navbar") 
-                span(v-if="primaryItem.children") {{primaryItem.text}}
-                router-link.menu-item.nav-link(v-if="!primaryItem.children" v-bind:to="primaryItem.path") {{primaryItem.text}}
-                ul(v-else v-bind:class="{'selected': selectedIndex === primaryItem.selectedId}")
+        ul.nav.flex-column
+            li.nav-item(v-for="(primaryItem, primaryIndex) in navbar" @click="activeNavbar(primaryItem)") 
+                span.nav-link(v-if="primaryItem.children") {{primaryItem.text}}
+                router-link.nav-link(v-if="!primaryItem.children" v-bind:to="primaryItem.path") {{primaryItem.text}}
+                ul.second-navbar(v-else v-bind:class="{'selected': selectedIndex === primaryItem.selectedId}")
                     li(v-for="(secondItem, secondIndex) in primaryItem.children")
-                        span(v-if="secondItem.children") {{secondItem.text}}
+                        //- span(v-if="secondItem.children") {{secondItem.text}}
                         router-link.menu-item.nav-link(v-if="!secondItem.children" v-bind:to="secondItem.path") {{secondItem.text}}
 </template>
 <script>
@@ -21,6 +21,14 @@ export default {
   },
   created: function () {
       this.navbar = navbarService.NavbarService.getData()
+  },
+  methods: {
+      activeNavbar: function (item) {
+        if (item.selectedId !== this.selectedIndex) {
+            this.$router.push(item.primaryPath)
+            this.selectedIndex = item.selectedId
+        }
+      }
   }
 }
 </script>
@@ -31,8 +39,12 @@ ul {
 li {
     list-style: none;
 }
-ul.navbar {
-    ul {
+ul.nav {
+    & > li {
+        cursor: pointer;
+    }
+    ul.second-navbar {
+        margin-left: 15px;
         & > li {
             display: none;
         }

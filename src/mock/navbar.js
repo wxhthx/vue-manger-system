@@ -3,6 +3,7 @@ export const Navbar = [
         id: 'privilege',
         text: '权限管理',
         selectedId: 'privilege',
+        primaryPath: '/plat/admin',
         children: [
             {
                 id: 'admin',
@@ -14,12 +15,13 @@ export const Navbar = [
     {
         id: 'users',
         text: '用户管理',
-        selectedId: 'uses',
+        selectedId: 'users',
+        primaryPath: '/plat/users',
         children: [
             {
                 id: 'usersManager',
-                text: '管理员',
-                path: '/plat/uses'
+                text: '用户管理',
+                path: '/plat/users'
             }
         ]
     },
@@ -27,10 +29,11 @@ export const Navbar = [
         id: 'schools',
         text: '学校管理',
         selectedId: 'schools',
+        primaryPath: '/plat/schools',
         children: [
             {
                 id: 'schoolsManager',
-                text: '管理员',
+                text: '学校管理',
                 path: '/plat/schools'
             }
         ]
@@ -39,6 +42,7 @@ export const Navbar = [
         id: 'courses',
         text: '课程管理',
         selectedId: 'courses',
+        primaryPath: '/plat/courses',
         children: [
             {
                 id: 'coursesManager',
@@ -51,6 +55,7 @@ export const Navbar = [
         id: 'resources',
         text: '资源管理',
         selectedId: 'resources',
+        primaryPath: '/plat/resources/courseResources',
         children: [
             {
                 id: 'courseResources',
@@ -68,9 +73,9 @@ export const Navbar = [
                 path: '/plat/resources/teacherResources'
             },
             {
-                id: 'coursesTypes',
+                id: 'courseTypes',
                 text: '课程类型',
-                path: '/plat/resources/coursesTypes'
+                path: '/plat/resources/courseTypes'
             }
         ]
     }
