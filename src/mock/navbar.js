@@ -2,6 +2,7 @@ export const Navbar = [
     {
         id: 'privilege',
         text: '权限管理',
+        selectedId: 'privilege',
         children: [
             {
                 id: 'admin',
@@ -13,21 +14,43 @@ export const Navbar = [
     {
         id: 'users',
         text: '用户管理',
-        path: '/plat/uses'
+        selectedId: 'uses',
+        children: [
+            {
+                id: 'usersManager',
+                text: '管理员',
+                path: '/plat/uses'
+            }
+        ]
     },
     {
         id: 'schools',
         text: '学校管理',
-        path: '/plat/schools'
+        selectedId: 'schools',
+        children: [
+            {
+                id: 'schoolsManager',
+                text: '管理员',
+                path: '/plat/schools'
+            }
+        ]
     },
     {
         id: 'courses',
         text: '课程管理',
-        path: '/plat/courses'
+        selectedId: 'courses',
+        children: [
+            {
+                id: 'coursesManager',
+                text: '课程管理',
+                path: '/plat/courses'
+            }
+        ]
     },
     {
         id: 'resources',
         text: '资源管理',
+        selectedId: 'resources',
         children: [
             {
                 id: 'courseResources',

@@ -5,6 +5,7 @@ import { RouterData } from '../mock/router'
 Vue.use(Router)
 
 export default new Router({
-  routes: RouterData
+  routes: RouterData,
+  linkActiveClass: 'active'
 })
 
