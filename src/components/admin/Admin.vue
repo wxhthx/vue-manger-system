@@ -30,7 +30,8 @@ export default {
         hello: 'hello world',
         detailsTable: [],
         detailsThead: [],
-        operateList: []
+        operateList: [],
+        addAdminPath: '/plat/addAdmin'
       }
   },
   components: {
@@ -42,7 +43,7 @@ export default {
       console.log(operateItem.type)
     },
     addAdmin () {
-      this.$router.push('/plat/admin/add')
+      this.$router.push(this.addAdminPath)
     }
   },
   created () {

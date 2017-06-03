@@ -4,8 +4,9 @@
       plat-header
     div.d-flex.justify-content-start
         div.col-xl-2.text-left
-            router-view.plat-navbar(name="navbar")
+          router-view.plat-navbar(name="navbar")
         div.col-xl-10.margin-top
+          transition
             router-view.main(name="main")
 </template>
 <script>
