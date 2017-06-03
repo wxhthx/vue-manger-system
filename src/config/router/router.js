@@ -36,8 +36,8 @@ export const RouterData = [
                 }
             },
             {
-                path: 'adminAdd',
-                name: 'adminAdd',
+                path: 'addAdmin',
+                name: 'addAdmin',
                 components: {
                     navbar: Navbar,
                     main: AddAdmin
@@ -46,7 +46,10 @@ export const RouterData = [
             {
                 path: 'adminDetail/:id',
                 name: 'adminDetail',
-                component: Details
+                components: {
+                    navbar: Navbar,
+                    main: Details
+                }
             },
             {
                 path: 'users',
