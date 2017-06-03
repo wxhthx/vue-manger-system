@@ -1,12 +1,12 @@
 <template lang="pug">
     div.d-flex.justify-content-start
         div.col-xl-2.text-left
-            plat-navbar
+            router-view.plat-navbar(name="navbar")
         div.col-xl-10.margin-top
-            router-view
+            router-view.main(name="main")
 </template>
 <script>
-import Navbar from '../navbar/Navbar'
+
 export default {
   data () {
     return {

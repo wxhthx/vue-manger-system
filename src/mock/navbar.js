@@ -55,27 +55,27 @@ export const Navbar = [
         id: 'resources',
         text: '资源管理',
         selectedId: 'resources',
-        primaryPath: '/plat/resources/courseResources',
+        primaryPath: '/plat/courseResources',
         children: [
             {
                 id: 'courseResources',
                 text: '课程资料',
-                path: '/plat/resources/courseResources'
+                path: '/plat/courseResources'
             },
             {
                 id: 'examResources',
                 text: '考试资料',
-                path: '/plat/resources/examResources'
+                path: '/plat/examResources'
             },
             {
                 id: 'teacherResources',
                 text: '讲师资料',
-                path: '/plat/resources/teacherResources'
+                path: '/plat/teacherResources'
             },
             {
                 id: 'courseTypes',
                 text: '课程类型',
-                path: '/plat/resources/courseTypes'
+                path: '/plat/courseTypes'
             }
         ]
     }

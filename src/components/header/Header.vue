@@ -2,7 +2,7 @@
   div.row.no-gutters.width_flud.plat-header.iconfont-admin
     div.row.col-12.col-sm-6.col-md-8
       h1.plat-logo.inline-block.text-hide logo
-      h1.plat-title.inline-block 书院管理运营平台
+      h1.plat-title.inline-block {{systemName}}
     div.col-6.col-md-4.d-flex.flex-row-reverse.align-items-stretch
       div.p-2.user-info
         div.admin-info
@@ -18,6 +18,7 @@
 </template>
 <script>
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -39,6 +40,11 @@ export default {
   created: function () {
     this.cur_data = moment().format('L')
     this.timeIntervl = setInterval(this.getData, 1000)
+  },
+  computed: {
+    ...mapGetters({
+      systemName: 'systemName'
+    })
   }
 }
 </script>

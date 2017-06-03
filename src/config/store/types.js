@@ -1,0 +1,1 @@
+export const UPDATE_SYSTEM_NAME = 'UPDATE_SYSTEM_NAME'

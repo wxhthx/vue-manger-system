@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { RouterData } from '../mock/router'
+import { RouterData } from './router'
 
 Vue.use(Router)
 

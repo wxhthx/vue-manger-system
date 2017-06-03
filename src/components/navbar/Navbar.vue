@@ -19,7 +19,7 @@ export default {
         selectedIndex: 'privilege',
         selectedClass: 'dirty',
         notSelectedClass: 'dry'
-      }    
+      }
   },
   created: function () {
       this.navbar = navbarService.NavbarService.getData()
@@ -30,6 +30,11 @@ export default {
             this.$router.push(item.primaryPath)
             this.selectedIndex = item.selectedId
         }
+      }
+  },
+  computed: {
+      computedPath () {
+          return '/plat/admin/detail/' + this.testId
       }
   }
 }
