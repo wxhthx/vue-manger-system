@@ -8,6 +8,7 @@ import CourseResources from '@/components/resources/course/CourseResources'
 import ExamResources from '@/components/resources/exam/ExamResources'
 import TeacherResources from '@/components/resources/teacher/TeacherResources'
 import CourseTypes from '@/components/resources/courseTypes/CourseTypes'
+import AddAdmin from '@/components/admin/add/AddAdmin'
 export const RouterData = [
     {
       path: '/',
@@ -27,7 +28,12 @@ export const RouterData = [
             {
                 path: 'admin',
                 name: 'admin',
-                component: Admin        
+                component: Admin
+            },
+            {
+                path: 'admin/add',
+                name: 'adminAdd',
+                component: AddAdmin
             },
             {
                 path: 'users',

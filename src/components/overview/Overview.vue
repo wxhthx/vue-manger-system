@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.width_flud
+  div.container
     header.row.plat-header
       plat-header
     plat-content

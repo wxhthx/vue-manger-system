@@ -2,9 +2,9 @@
     div.width_flud
         ul.nav.flex-column
             li.nav-item(v-for="(primaryItem, primaryIndex) in navbar" @click="activeNavbar(primaryItem)") 
-                span.nav-link(v-if="primaryItem.children") {{primaryItem.text}}
+                span.nav-link(v-if="primaryItem.children" v-bind:class="[selectedIndex === primaryItem.selectedId ? selectedClass : notSelectedClass, 'iconfont-admin']") {{primaryItem.text}}
                 router-link.nav-link(v-if="!primaryItem.children" v-bind:to="primaryItem.path") {{primaryItem.text}}
-                ul.second-navbar(v-else v-bind:class="{'selected': selectedIndex === primaryItem.selectedId}")
+                ul.second-navbar(v-else)
                     li(v-for="(secondItem, secondIndex) in primaryItem.children")
                         //- span(v-if="secondItem.children") {{secondItem.text}}
                         router-link.menu-item.nav-link(v-if="!secondItem.children" v-bind:to="secondItem.path") {{secondItem.text}}
@@ -16,7 +16,9 @@ export default {
       return {
         navbar: [],
         path: '/login',
-        selectedIndex: 'privilege'
+        selectedIndex: 'privilege',
+        selectedClass: 'dirty',
+        notSelectedClass: 'dry'
       }    
   },
   created: function () {
@@ -48,11 +50,13 @@ ul.nav {
         & > li {
             display: none;
         }
-        &.selected > li {
+    }
+    .dirty + ul.second-navbar {
+        & > li {
             display: block;
             & > a.active {
                 color: #F17C67;
-            }
+            } 
         }
     }
 }

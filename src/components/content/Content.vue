@@ -1,8 +1,8 @@
 <template lang="pug">
-    div.width_flud
-        div.col-xl-2.inline-block.text-left
+    div.d-flex.justify-content-start
+        div.col-xl-2.text-left
             plat-navbar
-        div.col-xl-10.inline-block
+        div.col-xl-10.margin-top
             router-view
 </template>
 <script>
@@ -18,7 +18,9 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-
+<style lang="scss" scoped>
+.margin-top {
+    margin-top: 15px;
+}
 </style>
 

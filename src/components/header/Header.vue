@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.row.no-gutters.width_flud.plat-header
+  div.row.no-gutters.width_flud.plat-header.iconfont-admin
     div.row.col-12.col-sm-6.col-md-8
       h1.plat-logo.inline-block.text-hide logo
       h1.plat-title.inline-block 书院管理运营平台
@@ -12,7 +12,9 @@
           div.info-left.inline-block {{cur_data}}
           div.info-right.inline-block
             button.btn.btn-secondary(@click="exit") 退出
-      div.p-2.message
+      div.p-2.message.d-flex.flex-column-reverse
+        div.message-text 消息
+        div.icon-message
 </template>
 <script>
 import moment from 'moment'
@@ -54,15 +56,20 @@ export default {
 .plat-title {
   margin: auto 0;
 }
-
+.message {
+  font-size: 50px;
+  & > .message-text {
+    font-size: 16px;
+  }
+}
 .user-info {
-  width: 300px;
+  width: 200px;
   & > .admin-info, & > .cur-time {
     width: inherit;
     height: 50%;
   }
   .info-left {
-    width: 220px;
+    width: 120px;
     text-align: right;
     padding-right: 20px;
   }

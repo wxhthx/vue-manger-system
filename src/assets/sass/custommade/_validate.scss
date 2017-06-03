@@ -1,0 +1,11 @@
+input.error, input.error:focus, input.error:hover, input.error:active {
+    border: 1px solid #F44336;
+    color: #F44336;
+    border-left-width: 5px;
+    background: #FFEBEE;
+}
+div.error {
+    text-align: left;
+    white-space: nowrap;
+    color: #F44336;
+}
