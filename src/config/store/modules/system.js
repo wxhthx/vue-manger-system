@@ -1,6 +1,6 @@
 import * as types from '../types'
 const state = {
-  systemName: '书院管理运营系统'
+  systemName: '前端管理平台'
 }
 
 const getters = {
