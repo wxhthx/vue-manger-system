@@ -1,11 +1,11 @@
 export const DetailsTableData = [
     {index: 1, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
-    {index: 1, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
-    {index: 1, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
-    {index: 1, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
-    {index: 1, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
-    {index: 1, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
-    {index: 1, name: '张三', phone: '15529237881', type: 'select', status: '使用'}
+    {index: 2, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
+    {index: 3, name: '赵四', phone: '15529237881', type: 'select', status: '使用'},
+    {index: 4, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
+    {index: 5, name: '王五', phone: '15529237881', type: 'select', status: '使用'},
+    {index: 6, name: '张三', phone: '15529237881', type: 'select', status: '使用'},
+    {index: 7, name: '文六', phone: '15529237881', type: 'select', status: '使用'}
 ]
 
 export const OperateList = [

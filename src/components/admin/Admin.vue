@@ -16,6 +16,7 @@
     div.width-flud
       admin-details(v-on:operator="operator"
       v-bind:tableData="detailsTable"
+      :pagination="pagination"
       v-bind:theadData="detailsThead"
       v-bind:operateList="operateList")
     div.d-flex.justify-content-end.margin-bottom
@@ -31,7 +32,8 @@ export default {
         detailsTable: [],
         detailsThead: [],
         operateList: [],
-        addAdminPath: '/plat/addAdmin'
+        addAdminPath: '/plat/addAdmin',
+        pagination: 4
       }
   },
   components: {
