@@ -61,7 +61,7 @@ export default {
     this.detailsTable = Service.AdminService.getDetailsTableData()
     this.detailsThead = Service.AdminService.getDetailsTheadData()
     this.operateList = Service.AdminService.getDetailsOprateList()
-    setTimeout(this.hideLoading, 2000)
+    setTimeout(this.hideLoading, 400)
   }
 }
 </script>

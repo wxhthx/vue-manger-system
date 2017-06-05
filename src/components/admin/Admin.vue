@@ -54,17 +54,13 @@ export default {
       this.loading = false
     },
     query () {
-      this.$http.get('/api/courses/courses/1').then((res) => {
-        console.log('success')
-        console.log(res)
-      })
     }
   },
   created () {
     this.detailsTable = Service.AdminService.getDetailsTableData()
     this.detailsThead = Service.AdminService.getDetailsTheadData()
     this.operateList = Service.AdminService.getDetailsOprateList()
-    setTimeout(this.hideLoading, 2000)
+    setTimeout(this.hideLoading, 300)
   }
 }
 </script>

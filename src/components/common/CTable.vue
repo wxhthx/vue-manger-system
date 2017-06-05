@@ -8,11 +8,11 @@ div.width_flud
             tr(v-for="(rowItem, rowIndex) in pagiTableData")
                 th(scope="row") {{rowItem[rowProperty]}}
                 td(v-for="(typeItem, typeIndex) in colType")
-                    span(v-if="typeIndex !== colType.length - 1") {{rowItem[typeItem]}}
+                    span(v-if="typeIndex !== colType.length - 1 || !ifoperate") {{rowItem[typeItem]}}
                     div.btn-group(v-if="ifoperate && typeIndex === colType.length - 1" role="group")
                         button.btn.btn-secondary(v-for="(btnItem, btnIndex) in operateList" @click="operator(rowItem, btnItem)") {{btnItem.text}}
     nav(aria-label="Page navigation example")
-        ul.pagination.justify-content-end(v-if="pagination !== tableData.length")
+        ul.pagination.justify-content-end(v-if="pagination !== -1")
             li.page-item.first-page(:class="{'disabled': curPageIndex === 0}")
                 a.page-link(href="javascript:void(0)" @click="toFirst") <<
             li.page-item.pre-page(:class="{'disabled': curPageIndex === 0}")

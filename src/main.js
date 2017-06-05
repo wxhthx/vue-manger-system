@@ -29,7 +29,7 @@ axios.interceptors.response.use(
     console.log(err)
   }
 )
-Vue.prototype.$http = axios
+// Vue.prototype.$http = axios
 Validator.addLocale(messages)
 
 Vue.use(VeeValidate, baseConfig)
