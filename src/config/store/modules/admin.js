@@ -1,7 +1,7 @@
 import * as types from '../types'
 const state = {
-  adminUserId: '100',
-  adminToken: '691c5e1be0f1a556198d5e65766b65a7' 
+  adminUserId: 'admin',
+  adminToken: '1234567890' 
 }
 
 const getters = {
