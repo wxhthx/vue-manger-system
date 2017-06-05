@@ -1,5 +1,7 @@
 <template lang="pug">
   div.width-flud
+    div.loading-div(v-if="loading")
+      div.loading
     form
       div.form-group.row
         label.col-sm-1.col-form-label(for="input-name") 姓名:
@@ -12,7 +14,7 @@
         div.col-sm-3
           input.form-control(type="text" id="input-status")
       div.form-group.row.justify-content-end.padding-right
-        button.btn.btn-primary 搜索
+        button.btn.btn-primary(@click="query") 搜索
     div.width-flud
       admin-details(v-on:operator="operator"
       v-bind:tableData="detailsTable"
@@ -33,7 +35,8 @@ export default {
         detailsThead: [],
         operateList: [],
         addAdminPath: '/plat/addAdmin',
-        pagination: 4
+        pagination: 4,
+        loading: true
       }
   },
   components: {
@@ -46,17 +49,25 @@ export default {
     },
     addAdmin () {
       this.$router.push(this.addAdminPath)
+    },
+    hideLoading () {
+      this.loading = false
+    },
+    query () {
+      this.$http.get('/api/courses/courses/1').then((res) => {
+        console.log('success')
+        console.log(res)
+      })
     }
   },
   created () {
     this.detailsTable = Service.AdminService.getDetailsTableData()
     this.detailsThead = Service.AdminService.getDetailsTheadData()
     this.operateList = Service.AdminService.getDetailsOprateList()
+    setTimeout(this.hideLoading, 2000)
   }
 }
 </script>
 <style lang="scss" scoped>
-.padding-right {
-  padding-right: 15px;
-}
+
 </style>
