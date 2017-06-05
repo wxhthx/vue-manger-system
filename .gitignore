@@ -8,3 +8,5 @@ test/unit/coverage
 test/e2e/reports
 selenium-debug.log
 src/config/store/modules/system.js
+src/config/store/modules/admin.js
+config/index.js

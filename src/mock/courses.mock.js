@@ -24,3 +24,10 @@ export const theadData = [
         text: '状态'
     }
 ]
+
+export const OperateList = [
+    {text: '下架', type: 'soldOut'},
+    {text: '编辑', type: 'edit'},
+    {text: '删除', type: 'delete'}
+]
+

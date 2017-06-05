@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {ALL_COURSES, CATEGORIES} from './apiPath/courses.path'
-import {theadData} from '@/mock/courses.mock'
+import {theadData, OperateList} from '@/mock/courses.mock'
 class CourseService {
     getCourses () {
         return axios({
@@ -16,6 +16,9 @@ class CourseService {
     }
     getTheadData () {
         return theadData
+    }
+    getOperateList () {
+        return OperateList
     }
 }
 

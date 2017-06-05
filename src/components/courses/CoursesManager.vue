@@ -51,7 +51,7 @@ export default {
 
       },
       addCourse () {
-          
+
       }
   },
   created () {
@@ -80,6 +80,7 @@ export default {
         })
     
     this.theadData = courseService.getTheadData()
+    this.operateList = courseService.getOperateList()
   },
   components: {
       'common-table': CTable
