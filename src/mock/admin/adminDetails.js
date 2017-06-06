@@ -16,10 +16,6 @@ export const OperateList = [
 
 export const DetailsTheadData = [
     {
-        id: 'index',
-        text: '序号'
-    },
-    {
         id: 'name',
         text: '姓名'
     },

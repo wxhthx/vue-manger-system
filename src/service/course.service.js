@@ -1,17 +1,17 @@
 import axios from 'axios'
-import {ALL_COURSES, CATEGORIES} from './apiPath/courses.path'
+import Path from './apiPath/courses.path'
 import {theadData, OperateList} from '@/mock/courses.mock'
 class CourseService {
     getCourses () {
         return axios({
             type: 'get',
-            url: ALL_COURSES
+            url: Path.ALL_COURSES
         })
     }
     getCategories () {
         return axios({
             type: 'get',
-            url: CATEGORIES
+            url: Path.CATEGORIES
         })
     }
     getTheadData () {
@@ -19,6 +19,12 @@ class CourseService {
     }
     getOperateList () {
         return OperateList
+    }
+    getOssSign () {
+        return axios({
+            type: 'get',
+            url: Path.OSS_SIGN
+        })
     }
 }
 

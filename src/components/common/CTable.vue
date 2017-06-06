@@ -3,10 +3,11 @@ div.width_flud
     table.table.table-striped
         thead.table-active
             tr
+                th 序号
                 th(v-for="(theadItem, theadIndex) in theadData") {{theadItem.text}}
         tbody
             tr(v-for="(rowItem, rowIndex) in pagiTableData")
-                th(scope="row") {{rowItem[rowProperty]}}
+                th(scope="row") {{rowIndex + 1}}
                 td(v-for="(typeItem, typeIndex) in colType")
                     span(v-if="typeIndex !== colType.length - 1 || !ifoperate") {{rowItem[typeItem]}}
                     div.btn-group(v-if="ifoperate && typeIndex === colType.length - 1" role="group")

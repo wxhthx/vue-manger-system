@@ -69,8 +69,8 @@ export default {
       }
   },
   created () {
-      this.statusData = Service.AdminService.getStatus()
-      this.typesData = Service.AdminService.getTypes()
+      this.statusData = Service.getStatus()
+      this.typesData = Service.getTypes()
   }
 }
 </script>

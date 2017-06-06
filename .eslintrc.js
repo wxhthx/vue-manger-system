@@ -28,6 +28,7 @@ module.exports = {
     'no-unused-vars': 0,
     'quotes': 0,
     'eqeqeq': 0,
-    'no-trailing-spaces': 0
+    'no-trailing-spaces': 0,
+    'camelcase': 0
   }
 }

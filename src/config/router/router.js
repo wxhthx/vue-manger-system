@@ -5,6 +5,7 @@ import Admin from '@/components/admin/Admin'
 import UsersManage from '@/components/users/UsersManage'
 import AddUser from '@/components/users/add/AddUser'
 import CoursesManager from '@/components/courses/CoursesManager'
+import AddCourse from '@/components/courses/add/AddCourse'
 import SchoolsManager from '@/components/schools/SchoolsManager'
 import CourseResources from '@/components/resources/course/CourseResources'
 import ExamResources from '@/components/resources/exam/ExamResources'
@@ -83,7 +84,15 @@ export const RouterData = [
                     navbar: Navbar,
                     main: CoursesManager
                 }
-            },    
+            },
+            {
+                path: 'addCourse',
+                name: 'addCourse',
+                components: {
+                    navbar: Navbar,
+                    main: AddCourse
+                }
+            },   
             {   
                 path: 'courseResources',
                 name: 'courseResources',

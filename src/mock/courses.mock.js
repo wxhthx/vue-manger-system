@@ -1,9 +1,5 @@
 export const theadData = [
     {
-        id: 'index',
-        text: '序号'
-    },
-    {
         id: 'course_name',
         text: '课程名称'
     },
@@ -22,6 +18,10 @@ export const theadData = [
     {
         id: 'status',
         text: '状态'
+    },
+    {
+        id: 'operator',
+        text: '操作'
     }
 ]
 

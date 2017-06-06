@@ -57,9 +57,9 @@ export default {
     }
   },
   created () {
-    this.detailsTable = Service.AdminService.getDetailsTableData()
-    this.detailsThead = Service.AdminService.getDetailsTheadData()
-    this.operateList = Service.AdminService.getDetailsOprateList()
+    this.detailsTable = Service.getDetailsTableData()
+    this.detailsThead = Service.getDetailsTheadData()
+    this.operateList = Service.getDetailsOprateList()
     setTimeout(this.hideLoading, 300)
   }
 }

@@ -40,7 +40,8 @@ export default {
         tableData: [],
         theadData: [],
         operateList: [],
-        pagination: 3
+        pagination: 3,
+        addCoursePath: '/plat/addCourse'
     }
   },
   methods: {
@@ -51,7 +52,7 @@ export default {
 
       },
       addCourse () {
-
+        this.$router.push(this.addCoursePath)
       }
   },
   created () {
@@ -64,7 +65,6 @@ export default {
                 (res) => {
                     let tableData = Object.assign([], res.data)
                     self.tableData = tableData.map((item, index) => {
-                        item.index = index
                         item.date = '2017.05.05'
                         item.status = '正常'
                         self.categories.forEach((cateItem) => {
