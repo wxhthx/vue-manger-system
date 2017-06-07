@@ -37,7 +37,7 @@ export default {
       this.cur_data = moment().format('L')
     }
   },
-  created: function () {
+  created () {
     this.cur_data = moment().format('L')
     this.timeIntervl = setInterval(this.getData, 1000)
   },

@@ -4,7 +4,7 @@ import * as actions from './actions'
 import * as getters from './getters'
 import admin from './modules/admin'
 import system from './modules/system'
-
+import upload from './modules/upload'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -14,7 +14,8 @@ export default new Vuex.Store({
   getters,
   modules: {
       system,
-      admin
+      admin,
+      upload
   },
   strict: debug,
   plugins: []
