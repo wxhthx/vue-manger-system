@@ -56,7 +56,7 @@ export default {
         delete payload.tutor_id
         courseService.getSelectedCourses(payload).then(
             (res) => {
-                console.log(res)
+                self.initData(res)
             }
         )
       },
