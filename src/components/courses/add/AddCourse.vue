@@ -6,7 +6,8 @@
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="name") 姓名
                     div.col-sm-9
-                        input.form-control(type="text" v-model="payload.name")
+                        input.form-control(type="text" v-model="payload.course_name"  name="name"  v-validate="'required|max:10'" data-vv-as="姓名" :class="{'error': errors.has('name')}")
+                        div.error(v-if="errors.has('name')") {{ errors.first('name') }}
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="category") 类型
                     div.col-sm-9
@@ -23,65 +24,94 @@
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="category") 讲师
                     div.col-sm-9
-                        select.form-control(type="text" v-model="payload.category_id")
-                            option(v-for="(cateItem, cateIndex) in categories" :value="cateItem.category_id") {{cateItem.category_name}}
-                div.form-group.row
-                    label.col-sm-3.col-form-label(for="category") 上架时间
-                    div.col-sm-9
-                        input.form-control(type="datetime-local" v-model="payload.sn")
-                div.form-group.row
-                    label.col-sm-3.col-form-label 状态
-                    div.col-sm-9
-                        input.form-control(type="text")
+                        select.form-control(type="text" v-model="payload.tutor_id")
+                            option(v-for="(tutorItem, tutorIndex) in tutors" :value="tutorItem.tutor_id") {{tutorItem.tutor_name}}
+                //- div.form-group.row
+                //-     label.col-sm-3.col-form-label(for="category") 上架时间
+                //-     div.col-sm-9
+                //-         input.form-control(type="datetime-local" v-model="payload.sn")
+                //- div.form-group.row
+                //-     label.col-sm-3.col-form-label 状态
+                //-     div.col-sm-9
+                //-         input.form-control(type="text")
             div.col
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="img") 课程简介
                     div.col-sm-9
-                        textarea.form-control(v-model="payload.depict")
+                        textarea.form-control(v-model="payload.depict"  name="depict"  v-validate="'required|min:50|max:500'" data-vv-as="课程简介" :class="{'error': errors.has('depict')}")
+                        div.error(v-if="errors.has('depict')") {{ errors.first('depict') }}
         div.row
             div.col.chapter-manager
             div.col.test-uploader
-        div.row.no-gutters
-            label.col-sm-3.col-form-label(for="img") 评分方式： 课程签到
-            div.col-sm-1
-                input.form-control
-            label.col-sm-3.col-form-label(for="img") 课程习题
-            div.col-sm-1
-                input.form-control
-            label.col-sm-3.col-form-label(for="img") 课程考核
-            div.col-sm-1
-                input.form-control
+        div.row.center-widget(v-if="payload.course_id")
+            div.col-sm-4.border.add-node
+                add-node(:course_id="payload.course_id" :primary-name="payload.course_name")
+            div.col-sm-8.border
+        //- div.row.no-gutters
+        //-     label.col-sm-3.col-form-label(for="img") 评分方式： 课程签到
+        //-     div.col-sm-1
+        //-         input.form-control
+        //-     label.col-sm-3.col-form-label(for="img") 课程习题
+        //-     div.col-sm-1
+        //-         input.form-control
+        //-     label.col-sm-3.col-form-label(for="img") 课程考核
+        //-     div.col-sm-1
+        //-         input.form-control
         div.btn-group.row.margin-top
-            button.btn.btn-primary(@click="save") 保存
+            button.btn.btn-primary(type="submit") 保存
             button.btn.btn-primary(@click="exit") 取消
-            button.btn.btn-primary(@click="soldInOrOut") 上架/下架
+            button.btn.btn-primary(v-if="payload.course_id" @click="soldInOrOut" disabled) 上架/下架
 </template>
 <script>
 import courseService from '@/service/course.service'
 import Upload from '@/components/common/Upload'
+import AddNode from './AddNode'
 export default {
   data () {
     return {
         payload: {
-            name: '',
+            course_id: '',
+            course_name: '',
             category_id: '',
             depict: '',
-            tutor_id: '',
+            tutor_id: '1',
             picture_url: '',
-            sn: ''
+            icon_url: '/icon/a.icon',
+            is_leaf_node: true,
+            learning_target_number: 1,
+            recommended_level: 0
         },
-        categories: []
+        categories: [],
+        tutors: []
     }
   },
   methods: {
       validateBeforeSubmit () {
-
+        this.$validator.validateAll().then(() => {
+            this.save()
+        }).catch(() => {
+            return
+        })
       },
       save () {
-
+        let self = this
+        // 修改用PUT保存数据,新增用POST保存数据
+        if (this.payload.course_id) {
+            courseService.saveEditedCourse(this.payload).then(
+                (res) => {
+                   self.$router.push('/plat/courses')
+                }
+            )
+        } else {
+            courseService.saveCourse(this.payload).then(
+                (res) => {
+                    self.$router.push('/plat/courses')
+                }
+            )
+        }
       },
       exit () {
-
+        this.$router.push('/plat/courses')
       },
       soldInOrOut () {
 
@@ -108,6 +138,21 @@ export default {
   },
   created () {
     var self = this
+    if (self.$route.params.id !== 'default') {
+        self.payload.course_id = self.$route.params.id
+        courseService.getSimpleCourse(self.payload.course_id).then(
+            (res) => {
+                self.payload.course_name = res.course_name
+                self.payload.category_id = res.category_id
+                self.payload.depict = res.depict
+                self.payload.tutor_id = res.tutor_id
+                self.payload.picture_url = res.picture_url
+                self.payload.is_leaf_node = res.is_leaf_node
+                self.payload.learning_target_number = res.learning_target_number
+                self.payload.recommended_level = res.recommended_level
+            }
+        )
+    }
     self.now = this.timestamp = Date.parse(new Date()) / 1000
     courseService.getCategories().then(
         (res) => {
@@ -115,14 +160,26 @@ export default {
             this.payload.category_id = this.categories[0].category_id
         }
     )
+    courseService.getAllTutors().then(
+        (res) => {
+            this.tutors = res.data
+            this.payload.tutor_id = this.tutors[0].tutor_id
+        }
+    )
   },
   mounted () {
   },
   components: {
-    'common-upload': Upload
+    'common-upload': Upload,
+    'add-node': AddNode
   }
 }
 </script>
-<style lang="scss">
-
+<style lang="scss" scoped>
+.center-widget {
+    height: 400px;
+}
+.add-node {
+    overflow: hidden;
+}
 </style>

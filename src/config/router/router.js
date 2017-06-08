@@ -86,7 +86,7 @@ export const RouterData = [
                 }
             },
             {
-                path: 'addCourse',
+                path: 'addCourse/:id',
                 name: 'addCourse',
                 components: {
                     navbar: Navbar,

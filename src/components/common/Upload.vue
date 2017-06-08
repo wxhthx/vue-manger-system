@@ -51,7 +51,7 @@ export default {
         }
         myDropzone.options.url = this.uploadData.host
         myDropzone.options.params = new_multipart_params
-        myDropzone.processQueue()
+        // myDropzone.processQueue()
       },
       get_suffix (filename) {
         let pos = filename.lastIndexOf('.')

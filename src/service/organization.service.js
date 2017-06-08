@@ -4,7 +4,7 @@ import Mock from '@/mock/organization.mock'
 class OrgannizationService {
     getAll () {
         return axios({
-            type: 'get',
+            method: 'get',
             url: Path.ALL_ORGANIZAIOTN
         })
     }
