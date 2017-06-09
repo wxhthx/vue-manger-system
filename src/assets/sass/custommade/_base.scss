@@ -41,6 +41,9 @@ tbody {
 .border {
     border: 1px solid $border-color;
 }
+.toast.top {
+    top: 100px !important;
+}
 // .img-uploader {
 //     padding: 15px;
 //     & > .img-select {

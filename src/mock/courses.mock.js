@@ -12,14 +12,6 @@ export const theadData = [
         text: '类型'
     },
     {
-        id: 'date',
-        text: '上架时间'
-    },
-    {
-        id: 'status',
-        text: '状态'
-    },
-    {
         id: 'operator',
         text: '操作'
     }

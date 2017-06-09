@@ -160,6 +160,13 @@ class CourseService {
             url: Path.ADD_COURSE_UNIT + '/' + unit_id
         })
     }
+
+    getTutorNameByIdList (list) {
+        return axios({
+            method: 'get',
+            url: Path.GET_COURSE_TUTORS_NAME + list
+        })
+    }
 }
 
 export default new CourseService()

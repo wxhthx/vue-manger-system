@@ -49,6 +49,7 @@ export default {
   methods: {
       query () {
         let self = this
+        self.loading = !self.loading
         let payload = Object.assign({}, this.payload)
         if (!payload.curseName) {
             delete payload.curseName
@@ -62,6 +63,14 @@ export default {
       },
       operator (item, btn) {
         let self = this
+        let successToast = {
+            message: '成功删除该课程',
+            theme: 'success'
+        }
+        let failedToast = {
+            message: '删除该课程失败',
+            theme: 'warning'
+        }
         if (btn.type === 'edit') {
             this.$router.push(this.addCoursePath + item.course_id)
             return
@@ -70,12 +79,15 @@ export default {
             self.loading = true
             courseService.deleteSimpleCourse(item.course_id).then(
                 (res) => {
+                    self.$toast(successToast)
                     courseService.getCourses().then(
                         (getres) => {
-                            self.initData(getres)
+                            self.initData(getres) 
                         }
                     )
-                } 
+                }, () => {
+                    self.$toast(failedToast)
+                }
             )
         }
         if (btn.type === 'soldOut') {
@@ -88,17 +100,40 @@ export default {
       initData (res) {
         let tableData = Object.assign([], res.data)
         let self = this
-        self.tableData = tableData.map((item, index) => {
-            item.date = '2017.05.05'
-            item.status = '正常'
-            self.categories.forEach((cateItem) => {
-                if (item.category_id === cateItem.category_id) {
-                    item.category_name = cateItem.category_name
+        let successToast = {
+            message: '成功加载课程数据',
+            theme: 'success'
+        }
+        let failedToast = {
+            message: '加载课程数据失败，请检查网络设备',
+            theme: 'warning'
+        }
+        let func = tableData.map((item, index) => {
+            return courseService.getTutorNameByIdList(item.tutor_id).then(
+                (res) => {
+                    let tutordata = res.data
+                    let tutorNameArr = tutordata.map((tutorItem) => {
+                        return tutorItem.tutor_name
+                    })
+                    item.tutor_id = tutorNameArr.join(',')
+                    self.categories.forEach((cateItem) => {
+                        if (item.category_id === cateItem.category_id) {
+                            item.category_name = cateItem.category_name
+                        }
+                    })
+                    return item
                 }
-            })
-            return item
+            )
         })
-        self.loading = false
+        Promise.all(func).then(
+            (res) => {
+                self.tableData = res
+                self.loading = false
+                self.$toast(successToast)
+            }, () => {
+                self.$toast(failedToast)
+            }
+        )
       }
   },
   created () {

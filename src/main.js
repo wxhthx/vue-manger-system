@@ -3,6 +3,7 @@ import axios from 'axios'
 import App from './App'
 import router from './config/router'
 import store from './config/store'
+import toast from './components/common/plugin/toast/toast'
 import VeeValidate, {Validator} from 'vee-validate'
 import {baseConfig} from './config/validate/validate.config'
 import messages from './config/validate/zh_CN'
@@ -31,7 +32,7 @@ axios.interceptors.response.use(
 // Vue.prototype.$http = axios
 Validator.addLocale(messages)
 
-Vue.use(VeeValidate, baseConfig)
+Vue.use(VeeValidate, baseConfig).use(toast, {container: 'app'})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

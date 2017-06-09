@@ -68,7 +68,7 @@ export default {
   },
   methods: {
       submit () {
-
+        
       },
       quit () {
           this.$router.push('/plat/users')

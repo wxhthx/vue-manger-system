@@ -10,7 +10,8 @@ export default {
     return {
         idProperty: '',
         now: '',
-        fileName: ''
+        fileName: '',
+        host: ''
     }
   },
   methods: {
@@ -24,6 +25,7 @@ export default {
             courseService.getOssSign().then((res) => {
                 let uploadData = {}
                 uploadData.host = res['host']
+                self.host = res['host']
                 uploadData.policyBase64 = res['policy']
                 uploadData.accessid = res['accessid']
                 uploadData.signature = res['signature']
@@ -32,7 +34,7 @@ export default {
                 uploadData.key = res['dir']
                 self.updateUploadData(uploadData)
                 self.upStart(myDropzone, filename)
-                self.$emit('getImageUrl', uploadData.host + '/' + self.fileName)
+                // self.$emit('getImageUrl', uploadData.host + '/' + self.fileName)
             })
             // return
         // }
@@ -51,7 +53,7 @@ export default {
         }
         myDropzone.options.url = this.uploadData.host
         myDropzone.options.params = new_multipart_params
-        // myDropzone.processQueue()
+        myDropzone.processQueue()
       },
       get_suffix (filename) {
         let pos = filename.lastIndexOf('.')
@@ -99,6 +101,13 @@ export default {
             let files = myDropzone.files 
             this.on('addedfile', function () {
                 vm.set_upload_param(myDropzone, files[files.length - 1].name)
+            })
+            this.on('complete', function () {
+                vm.$toast({
+                    message: '封面图片上传成功',
+                    theme: 'success'
+                })
+                vm.$emit('getImageUrl', vm.host + '/' + vm.fileName)
             })
         }
     })

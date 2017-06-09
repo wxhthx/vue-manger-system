@@ -17,7 +17,8 @@
                 div.form-group.row.height_flud
                     label.col-sm-3.col-form-label(for="img") 封面
                     div.col-sm-9#imageContainer
-                        common-upload(v-on:getImageUrl="getImageUrl")
+                        img.picrute.form-control(v-if="payload.picture_url" :src="payload.picture_url")
+                        common-upload(v-else v-on:getImageUrl="getImageUrl")
                         //- input.form-control.hidden-uploader(type="file" aria-describedby="fileHelp" @change="uploadImg")
             div.w-100
             div.col
@@ -95,17 +96,31 @@ export default {
       },
       save () {
         let self = this
+        let successToast = {
+            message: '成功保存课程',
+            theme: 'success'
+        }
+        let failedToast = {
+            message: '保存课程失败',
+            theme: 'warning'
+        }
         // 修改用PUT保存数据,新增用POST保存数据
         if (this.payload.course_id) {
             courseService.saveEditedCourse(this.payload).then(
                 (res) => {
-                   self.$router.push('/plat/courses')
+                    self.$toast(successToast)
+                    self.$router.push('/plat/courses')
+                }, () => {
+                    self.$toast(failedToast)
                 }
             )
         } else {
             courseService.saveCourse(this.payload).then(
                 (res) => {
+                    self.$toast(successToast)
                     self.$router.push('/plat/courses')
+                }, () => {
+                    self.$toast(failedToast)
                 }
             )
         }
@@ -137,10 +152,11 @@ export default {
       }
   },
   created () {
-    var self = this
+    let self = this
+    let couserPromise = null
     if (self.$route.params.id !== 'default') {
         self.payload.course_id = self.$route.params.id
-        courseService.getSimpleCourse(self.payload.course_id).then(
+        couserPromise = courseService.getSimpleCourse(self.payload.course_id).then(
             (res) => {
                 self.payload.course_name = res.course_name
                 self.payload.category_id = res.category_id
@@ -153,19 +169,32 @@ export default {
             }
         )
     }
-    self.now = this.timestamp = Date.parse(new Date()) / 1000
-    courseService.getCategories().then(
+    self.now = self.timestamp = Date.parse(new Date()) / 1000
+    let categoryPromise = courseService.getCategories().then(
         (res) => {
-            this.categories = res.data
-            this.payload.category_id = this.categories[0].category_id
+            self.categories = res.data
+            self.payload.category_id = self.categories[0].category_id
         }
     )
-    courseService.getAllTutors().then(
+    let tutorPromise = courseService.getAllTutors().then(
         (res) => {
-            this.tutors = res.data
-            this.payload.tutor_id = this.tutors[0].tutor_id
+            self.tutors = res.data
+            self.payload.tutor_id = self.tutors[0].tutor_id
         }
     )
+    let toast = {
+        message: '数据加载完成',
+        theme: 'success'
+    }
+    if (couserPromise) {
+        Promise.all([couserPromise, categoryPromise, tutorPromise]).then(
+            self.$toast(toast)
+        )
+    } else {
+        Promise.all([categoryPromise, tutorPromise]).then(
+            self.$toast(toast)
+        )
+    }
   },
   mounted () {
   },
@@ -178,6 +207,9 @@ export default {
 <style lang="scss" scoped>
 .center-widget {
     height: 400px;
+}
+.picrute {
+    height: 100px;
 }
 .add-node {
     overflow: hidden;
