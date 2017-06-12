@@ -17,6 +17,7 @@
     "moment": "^2.18.1",
     "vee-validate": "^2.0.0-rc.5",
     "vue": "^2.3.3",
+    "vue-awesome-toast": "^2.0.1-test-1",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1"
   },

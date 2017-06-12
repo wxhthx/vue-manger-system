@@ -46,7 +46,7 @@
             div.col.test-uploader
         div.row.center-widget(v-if="payload.course_id")
             div.col-sm-4.border.add-node
-                add-node(:course_id="payload.course_id" :primary-name="payload.course_name")
+                add-node(:course_id="payload.course_id" :node-data-list="nodeData" :primary-name="payload.course_name")
             div.col-sm-8.border
         //- div.row.no-gutters
         //-     label.col-sm-3.col-form-label(for="img") 评分方式： 课程签到
@@ -60,8 +60,8 @@
         //-         input.form-control
         div.btn-group.row.margin-top
             button.btn.btn-primary(type="submit") 保存
-            button.btn.btn-primary(@click="exit") 取消
-            button.btn.btn-primary(v-if="payload.course_id" @click="soldInOrOut" disabled) 上架/下架
+            button.btn.btn-primary(@click.prevent="exit") 取消
+            button.btn.btn-primary(v-if="payload.course_id" @click.prevent="soldInOrOut" disabled) 上架/下架
 </template>
 <script>
 import courseService from '@/service/course.service'
@@ -83,7 +83,8 @@ export default {
             recommended_level: 0
         },
         categories: [],
-        tutors: []
+        tutors: [],
+        nodeData: []
     }
   },
   methods: {
@@ -154,6 +155,7 @@ export default {
   created () {
     let self = this
     let couserPromise = null
+    let nodePromise = null
     if (self.$route.params.id !== 'default') {
         self.payload.course_id = self.$route.params.id
         couserPromise = courseService.getSimpleCourse(self.payload.course_id).then(
@@ -166,6 +168,11 @@ export default {
                 self.payload.is_leaf_node = res.is_leaf_node
                 self.payload.learning_target_number = res.learning_target_number
                 self.payload.recommended_level = res.recommended_level
+            }
+        )
+        nodePromise = courseService.getCoursesDetails(self.payload.course_id).then(
+            (res) => {
+                self.nodeData = res
             }
         )
     }
@@ -212,6 +219,6 @@ export default {
     height: 100px;
 }
 .add-node {
-    overflow: hidden;
+    overflow: auto;
 }
 </style>

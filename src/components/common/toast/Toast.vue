@@ -1,5 +1,9 @@
 <template lang="pug">
-  div.toast(:class="[{'hidden': !visible}, position, theme]")
+div.toast-container(v-if="ifGlobalPosition" :class="[position]" :style="globalPosition")
+  div.toast(:class="[{'hidden': !visible}, theme]" :style="instancePosition")
+    i {{message}}
+div.toast-container(v-else :class="[position]")
+  div.toast(:class="[{'hidden': !visible}, theme]" :style="instancePosition")
     i {{message}}
 </template>
 <script>
@@ -9,7 +13,19 @@ export default {
             visible: true,
             position: '',
             message: '',
-            theme: ''
+            theme: '',
+            globalPosition: {
+            },
+            instancePosition: {
+            }
+        }
+    },
+    computed: {
+        ifGlobalPosition () {
+            for (let i in this.globalPosition) {
+                return true
+            }
+            return false
         }
     }
 }
@@ -27,9 +43,26 @@ $pink:   #ff5b77 !default;
 $purple: #613d7c !default;
 $inverse: #292b2c !default;
 $faded: #f7f7f7 !default;
-
-.toast {
+.toast-container {
     position: absolute;
+    &.right {
+        right: 0;
+    }
+    &.left {
+        left: 0;
+    }
+    &.middle {
+        top: 50%;
+    }
+    &.top {
+        top: 0%;
+    }
+    &.bottom {
+        top: 90%;
+    }
+}
+.toast {
+    position: relative;
     word-wrap:break-word;
     padding:10px;
     text-align: center;
@@ -46,21 +79,6 @@ $faded: #f7f7f7 !default;
     &.hidden {
         transform:translate(-50%,-50%) scale(0);   
     }
-    &.right {
-        right: 0;
-    }
-    &.left {
-        left: 0;
-    }
-    &.middle {
-        top: 50%;
-    }
-    &.top {
-        top: 10%;
-    }
-    &.bottom {
-        top: 90%;
-    }
     &.primary {
         background: $blue;
     }
@@ -72,7 +90,7 @@ $faded: #f7f7f7 !default;
         color: $green;
     }
     &.warning {
-        background: $yellow;
+        background: $pink;
     }
     &.danger {
         background: $red;

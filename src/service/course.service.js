@@ -167,6 +167,12 @@ class CourseService {
             url: Path.GET_COURSE_TUTORS_NAME + list
         })
     }
+    getCoursesDetails (course_id) {
+        return axios({
+            method: 'get',
+            url: Path.SAVE_COURSE + '/' + course_id + '/content'
+        })
+    }
 }
 
 export default new CourseService()

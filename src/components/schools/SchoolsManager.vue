@@ -27,7 +27,7 @@ export default {
         detailsTable: [],
         detailsThead: [],
         operateList: [],
-        addAdminPath: '/plat/addAdmin',
+        addAdminPath: '/plat/addSchool/default',
         pagination: 4,
         loading: true
       }

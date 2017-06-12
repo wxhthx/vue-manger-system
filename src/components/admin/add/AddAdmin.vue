@@ -25,9 +25,9 @@
                 input.form-control(type="password" id="input-password" v-model="admin.password" name="password" v-validate="'required|min:6|max:20'" data-vv-as="密码" :class="{'error': errors.has('password')}")
                 div.error(v-if="errors.has('password')") {{errors.first('password')}}
         div.btn-group(role="group")
-            button.btn.btn-primary(@click="startOrStopUsing") 启用/停用
+            button.btn.btn-primary(@click.prevent="startOrStopUsing") 启用/停用
             button.btn.btn-primary(type="submit") 保存
-            button.btn.btn-primary(@click="quit") 取消
+            button.btn.btn-primary(@click.prevent="quit") 取消
 </template>
 <script>
 import Service from '@/service/admin.service'

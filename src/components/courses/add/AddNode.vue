@@ -5,48 +5,45 @@
     li.primary-li
         a.primary-a.iconfont-node.icon-add-node.node-icon-margin-right(href="javascript:void(0)" @click="addSecondaryLi") {{primaryName}}
         //- secondNode
-        ul.secondary-ul(v-if="secondaryList.length")
-            li.secondary-li(v-for="(secItem, secIndex) in secondaryList")
-                input.control-form(v-if="secItem.valid" v-model="secItem.value" :placeholder="secItem.placeholder" @blur="secondaryBlur(secItem)")
-                a.secondary-a.iconfont-node.icon-add-node(v-else href="javascript:void(0)" @click="addThirdaryLi(secItem)") {{secItem.value}}
-                a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" @click="deleteSecondary(secItem, secIndex, secondaryList)")
+        ul.secondary-ul(v-if="nodeDataList.children && nodeDataList.children.length")
+            li.secondary-li(v-for="(secItem, secIndex) in nodeDataList.children")
+                input.control-form(v-if="secItem.valid" v-model="secItem.chapter_name" :placeholder="secItem.placeholder" @blur="secondaryBlur(secItem)")
+                a.secondary-a.iconfont-node.icon-add-node(v-else href="javascript:void(0)" @click="addThirdaryLi(secItem)") {{secItem.chapter_name}}
+                a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" @click="deleteSecondary(secItem, secIndex, nodeDataList.children)")
                 a.iconfont-node.icon-edit.node-btn(v-if="!secItem.valid" @click="editSecondary(secItem)")
-                //- thirdNode
-                ul.thirdary-ul(v-if="secItem.thirdaryList.length")
-                    li.thirdary-li(v-for="(thirdItem, thirdIndex) in secItem.thirdaryList")
-                        input.control-form(v-if="thirdItem.valid" v-model="thirdItem.value" :placeholder="thirdItem.placeholder" @blur="thirdBlur(thirdItem, secItem)")
-                        a.third-a.iconfont-node.icon-add-node(v-else href="javascript:void(0)" @click="addFourthLi(thirdItem)") {{thirdItem.value}}
-                        a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" @click="deleteThird(thirdItem, thirdIndex, secItem.thirdaryList)")
+                //- //- thirdNode
+                ul.thirdary-ul(v-if="secItem.children && secItem.children.length")
+                    li.thirdary-li(v-for="(thirdItem, thirdIndex) in secItem.children")
+                        input.control-form(v-if="thirdItem.valid" v-model="thirdItem.section_name" @blur="thirdBlur(thirdItem, secItem)")
+                        a.third-a.iconfont-node.icon-add-node(v-else href="javascript:void(0)" @click="addFourthLi(thirdItem)") {{thirdItem.section_name}}
+                        a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" @click="deleteThird(thirdItem, thirdIndex, secItem.children)")
                         a.iconfont-node.icon-edit.node-btn(v-if="!thirdItem.valid" @click="editThird(thirdItem)")
                         //- fourthNode
-                        ul.fourth-ul(v-if="thirdItem.fourthList.length")
-                            li.fourth-li(v-for="(fourthItem, fourthIndex) in thirdItem.fourthList")
-                                input.control-form(v-if="fourthItem.valid" v-model="fourthItem.value" :placeholder="fourthItem.placeholder" @blur="fourthBlur(fourthItem, thirdItem)")
-                                label.fourth-a.iconfont-node.icon-add-node(v-else) {{fourthItem.value}}
-                                a.iconfont-node.icon-delete.node-btn(v-if="!fourthItem.valid" @click="deleteFourth(fourthItem, fourthIndex, thirdItem.fourthList)")
+                        ul.fourth-ul(v-if="thirdItem.children && thirdItem.children.length")
+                            li.fourth-li(v-for="(fourthItem, fourthIndex) in thirdItem.children")
+                                input.control-form(v-if="fourthItem.valid" v-model="fourthItem.unit_name" @blur="fourthBlur(fourthItem, thirdItem)")
+                                label.fourth-a.iconfont-node.icon-add-node(v-else) {{fourthItem.unit_name}}
+                                a.iconfont-node.icon-delete.node-btn(v-if="!fourthItem.valid" @click="deleteFourth(fourthItem, fourthIndex, thirdItem.children)")
                                 a.iconfont-node.icon-edit.node-btn(v-if="!fourthItem.valid" @click="editFourth(fourthItem)")
 </template>
 <script>
 import courseService from '@/service/course.service'
 export default {
-  props: ['course_id', 'primaryName'],
+  props: ['course_id', 'primaryName', 'nodeDataList'],
   data () {
       return {
-          secondaryList: [],
+        //   nodeDataList.children: [],
           secondaryItem: {
-              value: '',
-              valid: true,
-              placeholder: '请填入二级目录相关信息'
+              chapter_name: '',
+              valid: true
           },
           thirdaryItem: {
-              value: '',
-              valid: true,
-              placeholder: '请填入三级目录相关信息'
+              section_name: '',
+              valid: true
           },
           fourthItem: {
-              value: '',
-              valid: true,
-              placeholder: '请填入四级目录相关信息'
+              unit_name: '',
+              valid: true
           },
           validPointer: true
       }
@@ -67,17 +64,20 @@ export default {
               return
           }
           let secondaryItem = Object.assign({}, this.secondaryItem, {thirdaryList: []})
-          this.secondaryList.push(Object.assign({}, secondaryItem))
-        //   this.secondaryList[this.secondaryList.length - 1].thirdaryList = []
+          if (!this.nodeDataList.children) {
+            this.nodeDataList.children = []
+          }
+          this.nodeDataList.children.push(Object.assign({}, secondaryItem))
+        //   this.nodeDataList.children[this.nodeDataList.children.length - 1].thirdaryList = []
           this.validPointer = false
       },
       secondaryBlur (item) {
-          if (!item.value) {
+          if (!item.chapter_name) {
             return
           }
           let self = this
           if (!item.chapter_id) {
-            let payload = Object.assign({}, this.commonPayload, {chapter_name: item.value})
+            let payload = Object.assign({}, this.commonPayload, {chapter_name: item.chapter_name})
             courseService.addChapters(payload).then(
                 (res) => {
                     self.validPointer = true
@@ -87,7 +87,7 @@ export default {
                 }
             )
           } else {
-            let payload = Object.assign({}, this.commonPayload, {chapter_name: item.value, part_id_list: item.part_id_list})
+            let payload = Object.assign({}, this.commonPayload, {chapter_name: item.chapter_name, part_id_list: item.part_id_list})
             courseService.updateChapters(item.chapter_id, payload).then(
                (res) => {
                    self.validPointer = true
@@ -108,15 +108,23 @@ export default {
       },
 
       editSecondary (item) {
-          item.valid = !item.valid
+        if (item.valid === undefined) {
+            this.$set(item, 'valid', true)
+        } else {
+            item.valid = true
+        }
       },
 
       addThirdaryLi (item) {
           if (!this.validPointer) {
               return
           }
-          let thirdaryItem = Object.assign({}, this.thirdaryItem, {fourthList: []})
-          item.thirdaryList.push(Object.assign({}, thirdaryItem))
+          if (!item.children) {
+            //   item.children = []
+              this.$set(item, 'children', [])
+          }
+          let thirdaryItem = Object.assign({}, this.thirdaryItem, {children: []})
+          item.children.push(Object.assign({}, thirdaryItem))
           this.validPointer = false
       },
 
@@ -130,20 +138,25 @@ export default {
       },
 
       editThird (item) {
-        item.valid = !item.valid
+        if (item.valid === undefined) {
+            this.$set(item, 'valid', true)
+        } else {
+            item.valid = true
+        }
       },
 
       thirdBlur (item, chapter) {
-        if (!item.value) {
+        if (!item.section_name) {
             return
         }
         let self = this
         if (!item.section_id) {
-            let payload = Object.assign({}, this.commonPayload, {section_name: item.value, chapter_id: chapter.chapter_id})
+            let payload = Object.assign({}, this.commonPayload, {section_name: item.section_name, chapter_id: chapter.chapter_id})
             courseService.addSections(payload).then(
                 (res) => {
                     self.validPointer = true
-                    item.valid = false
+                    // item.valid = false
+                    self.$set(item, 'valid', false)
                     item.section_id = res.section_id
                     item.chapter_id = res.chapter_id
                     item.part_id_list = res.part_id_list
@@ -152,7 +165,7 @@ export default {
         } else {
             let payload = Object.assign({}, this.commonPayload,
             {
-                chapter_name: item.value,
+                section_name: item.section_name,
                 part_id_list: item.part_id_list,
                 chapter_id: item.chapter_id
             })
@@ -170,21 +183,26 @@ export default {
         if (!this.validPointer) {
             return
         }
-        item.fourthList.push(Object.assign({}, this.fourthItem))
+        if (!item.children) {
+            // item.children = []
+            this.$set(item, 'children', [])
+        }
+        item.children.push(Object.assign({}, this.fourthItem))
         this.validPointer = false
       },
 
       fourthBlur (item, unit) {
-        if (!item.value) {
+        if (!item.unit_name) {
             return
         }
         let self = this
         if (!item.unit_id) {
-            let payload = Object.assign({}, this.commonPayload, {unit_name: item.value, chapter_id: unit.chapter_id, section_id: unit.section_id})
+            let payload = Object.assign({}, this.commonPayload, {unit_name: item.unit_name, chapter_id: unit.chapter_id, section_id: unit.section_id})
             courseService.addUnits(payload).then(
                 (res) => {
                     self.validPointer = true
-                    item.valid = false
+                    // item.valid = false
+                    self.$set(item, 'valid', false)
                     item.unit_id = res.unit_id
                     item.section_id = res.section_id
                     // item.chapter_id = res.chapter_id
@@ -194,10 +212,10 @@ export default {
             )
         } else {
             let payload = Object.assign({}, this.commonPayload, {
-                unit_name: item.value,
-                section_id: unit.section_id,
-                unit_type: unit.unit_type,
-                part_id_list: unit.part_id_list
+                unit_name: item.unit_name,
+                section_id: item.section_id,
+                unit_type: item.unit_type,
+                part_id_list: item.part_id_list
             })
             courseService.updateUnits(item.unit_id, payload).then(
                 (res) => {
@@ -219,7 +237,11 @@ export default {
       },
 
       editFourth (item) {
-        item.valid = !item.valid
+        if (item.valid === undefined) {
+            this.$set(item, 'valid', true)
+        } else {
+            item.valid = true
+        }
       }
   }
 }
