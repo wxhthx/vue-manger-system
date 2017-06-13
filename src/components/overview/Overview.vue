@@ -6,12 +6,14 @@
         div.col-xl-2.text-left
           router-view.plat-navbar(name="navbar")
         div.col-xl-10.margin-top
+          div.loading-div(v-if="loading")
+            div.loading
           transition
             router-view.main(name="main")
 </template>
 <script>
 import Header from '../header/Header'
-// import Content from '../content/Content'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -21,6 +23,11 @@ export default {
   components: {
     'plat-header': Header
     // 'plat-content': Content
+  },
+  computed: {
+    ...mapGetters({
+      loading: 'loading'
+    })
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template lang="pug">
   div.width_flud
-    modal(v-on:btnFunc="btnFunc" :header="modal.header" :message="modal.message" :footer="modal.footer")
+    //- modal(v-on:btnFunc="btnFunc" :header="modal.header" :message="modal.message" :footer="modal.footer")
     form(@submit.prevent="validateBeforeSubmit")
         div.row
             div.col   

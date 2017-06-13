@@ -1,7 +1,5 @@
 <template lang="pug">
   div.width-flud
-    div.loading-div(v-if="loading")
-      div.loading
     form
       div.form-group.row
         label.col-sm-1.col-form-label(for="input-name") 名称:
@@ -28,6 +26,7 @@
 <script>
 import courseService from '@/service/course.service'
 import CTable from '@/components/common/CTable'
+import loadingMixin from '@/config/mixins/loading.mixin'
 export default {
   data () {
     return {
@@ -46,10 +45,12 @@ export default {
         addCoursePath: '/plat/addCourse/'
     }
   },
+  mixins: [
+      loadingMixin
+  ],
   methods: {
       query () {
         let self = this
-        self.loading = !self.loading
         let payload = Object.assign({}, this.payload)
         if (!payload.curseName) {
             delete payload.curseName
@@ -128,7 +129,7 @@ export default {
         Promise.all(func).then(
             (res) => {
                 self.tableData = res
-                self.loading = false
+                self.hiddenLoading()
                 self.$toast(successToast)
             }, () => {
                 self.$toast(failedToast)

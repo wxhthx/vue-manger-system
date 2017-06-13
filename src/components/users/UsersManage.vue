@@ -1,7 +1,5 @@
 <template lang="pug">
   div.width-flud
-    div.loading-div(v-if="loading")
-      div.loading
     form
       div.form-group.row
         label.col-sm-1.col-form-label(for="input-name") 姓名:
@@ -12,7 +10,8 @@
           input.form-control(type="text" id="input-phone" v-model="payload.phone")
         label.col-sm-1.col-form-label(for="input-school")  学校/单位:
         div.col-sm-2
-          input.form-control(type="text" id="input-school" v-model="payload.organization_name")
+          select.form-control(type="text" id="input-school" v-model="payload.organization_id")
+            option(v-for="(orgaItem, orgaIndex) in payload.organizations" :value="orgaItem.id") {{orgaItem.name}}
         label.col-sm-1.col-form-label(for="input-number")  学号/工号:
         div.col-sm-2
           input.form-control(type="text" id="input-number" v-model="payload.sno")
@@ -30,6 +29,9 @@
 <script>
 import CTable from '../common/CTable'
 import Service from '@/service/users.service'
+import OrganizationService from '@/service/organization.service'
+import loadingMixin from '@/config/mixins/loading.mixin'
+
 export default {
   data () {
       return {
@@ -39,15 +41,19 @@ export default {
         operateList: [],
         addAdminPath: '/plat/addUser/',
         pagination: 4,
-        loading: true,
+        defaultQuery: false,
         payload: {
           user_name: '',
           phone: '',
-          organization_name: '',
+          organizations: '',
+          organization_id: '',
           sno: ''
         }
       }
   },
+  mixins: [
+    loadingMixin
+  ],
   components: {
     'admin-details': CTable
   },
@@ -68,6 +74,7 @@ export default {
       }
     },
     query () {
+      this.defaultQuery = true
       let data = {}
       if (this.payload.user_name) {
         data.user_name = this.payload.user_name
@@ -89,12 +96,41 @@ export default {
     hideLoading () {
       this.loading = false
     },
+    getAllPromise () {},
+    orgaPromise () {},
     initQuery (data) {
-      Service.getAllUsers(data).then(
+      this.getAllPromise = Service.getAllUsers(data).then(
         (res) => {
           this.detailsTable = res.users
-          this.$toast('用户数据加载完成')
-          this.hideLoading()
+          console.log('getAllPromise resolved')
+        }
+      )
+      this.orgaPromise = OrganizationService.getAll().then(
+        (res) => {
+          this.payload.organizations = res.school
+          this.payload.organization_id = this.payload.organizations[0].id
+          console.log('orgaPromise resolved')
+        }
+      )
+      Promise.all([this.getAllPromise, this.orgaPromise]).then(
+        (res) => {
+            if (this.defaultQuery) {
+              this.hiddenLoading()
+              this.getAllPromise = null
+              this.orgaPromise = null
+              this.defaultQuery = false
+            }
+            console.log('init all Promise resolved')
+        }
+      )
+      // return [getAllPromise, orgaPromise]
+    },
+
+    getOrganizations () {
+      return OrganizationService.getAll().then(
+        (res) => {
+          this.payload.organizations = res.school
+          this.payload.organization_id = this.payload.organizations[0].id
         }
       )
     }
@@ -103,6 +139,15 @@ export default {
     this.initQuery({})
     this.detailsThead = Service.getDetailsTheadData()
     this.operateList = Service.getDetailsOprateList()
+    Promise.all([this.getAllPromise, this.orgaPromise]).then(
+      (res) => {
+          console.log('all Promise resolved')
+          this.hiddenLoading()
+          this.$toast('用户数据加载完成')
+          this.getAllPromise = null
+          this.orgaPromise = null
+      }
+    )
   }
 }
 </script>

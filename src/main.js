@@ -11,6 +11,7 @@ import {baseConfig} from './config/validate/validate.config'
 import messages from './config/validate/zh_CN'
 Vue.config.productionTip = false
 axios.interceptors.request.use(function (config) {
+    store.commit('SHOW_LOADING')
     // 这里的config包含每次请求的内容
     if (store.getters.adminUser) {
         config.headers.admin_user_id = store.getters.adminUser.admin_user_id

@@ -1,7 +1,5 @@
 <template lang="pug">
   div.width-flud
-    div.loading-div(v-if="loading")
-      div.loading
     form
       div.form-group.row
         label.col-sm-1.col-form-label(for="input-name") 姓名:
@@ -21,6 +19,7 @@
 <script>
 import CTable from '../common/CTable'
 import Service from '@/service/organization.service'
+import loadingMixin from '@/config/mixins/loading.mixin'
 export default {
   data () {
       return {
@@ -32,6 +31,9 @@ export default {
         loading: true
       }
   },
+  mixins: [
+    loadingMixin
+  ],
   components: {
     'admin-details': CTable
   },
@@ -51,28 +53,25 @@ export default {
       }
     },
     addAdmin () {
-      // this.$router.push(this.addAdminPath + 'default')
-      this.$modal({
-        message: '请确认继续',
-        header: '提示',
-        footer: {
-          btns: [
-            {text: '确认', type: 'confirm'},
-            {text: '取消', type: 'exit'}
-          ]
-        }
-      })
-    },
-    hideLoading () {
-      this.loading = false
+      this.$router.push(this.addAdminPath + 'default')
+      // this.$modal({
+      //   message: '请确认继续',
+      //   header: '提示',
+      //   footer: {
+      //     btns: [
+      //       {text: '确认', type: 'confirm'},
+      //       {text: '取消', type: 'exit'}
+      //     ]
+      //   }
+      // })
     },
     query () {
     },
+    getAllPromise () {},
     initQuery () {
-      Service.getAll().then(
+      this.getAllPromise = Service.getAll().then(
         (res) => {
             this.detailsTable = res.school
-            this.hideLoading()
             this.$toast({
               message: ' 成功加载学校数据',
               theme: 'success'
@@ -82,9 +81,15 @@ export default {
     }
   },
   created () {
-    this.initQuery()
-    this.detailsThead = Service.getTheadData()
-    this.operateList = Service.getOperateList()
+    let self = this
+    self.initQuery()
+    self.detailsThead = Service.getTheadData()
+    self.operateList = Service.getOperateList()
+    Promise.all([this.getAllPromise]).then(
+      (res) => {
+        self.hiddenLoading()
+      }
+    )
   }
 }
 </script>
