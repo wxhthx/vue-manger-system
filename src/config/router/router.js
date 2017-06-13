@@ -63,7 +63,7 @@ export const RouterData = [
                 }
             },
             {
-                path: 'addUser',
+                path: 'addUser/:id',
                 name: 'addUser',
                 components: {
                     navbar: Navbar,

@@ -31,7 +31,7 @@ toastPlugin.install = function (Vue, options) {
         } else if (!options.container) {
             document.body.appendChild(instance.$el)
         } else {
-            document.getElementById(options.container).children[0].appendChild(instance.$el)
+            document.getElementById(options.container).appendChild(instance.$el)
         }        
         instance.visible = true
         setTimeout(function () {

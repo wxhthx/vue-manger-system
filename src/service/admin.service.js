@@ -2,7 +2,7 @@
  * 
  * handle business of navbar
  */
-import {DetailsTableData, DetailsTheadData, OperateList, Status, Types} from '../mock/admin/adminDetails'
+import {DetailsTableData, DetailsTheadData, OperateList, Status, Types} from '../mock/adminDetails'
 
 class AdminService {
     getDetailsTableData () {

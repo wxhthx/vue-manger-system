@@ -6,18 +6,18 @@
       div.form-group.row
         label.col-sm-1.col-form-label(for="input-name") 姓名:
         div.col-sm-2
-          input.form-control(type="text" id="input-name")
+          input.form-control(type="text" id="input-name" v-model="payload.user_name")
         label.col-sm-1.col-form-label(for="input-phone")  手机:
         div.col-sm-2
-          input.form-control(type="text" id="input-phone")
+          input.form-control(type="text" id="input-phone" v-model="payload.phone")
         label.col-sm-1.col-form-label(for="input-school")  学校/单位:
         div.col-sm-2
-          input.form-control(type="text" id="input-school")
+          input.form-control(type="text" id="input-school" v-model="payload.organization_name")
         label.col-sm-1.col-form-label(for="input-number")  学号/工号:
         div.col-sm-2
-          input.form-control(type="text" id="input-number")
+          input.form-control(type="text" id="input-number" v-model="payload.sno")
       div.form-group.row.justify-content-end.padding-right
-        button.btn.btn-primary 搜索
+        button.btn.btn-primary(@click="query") 搜索
     div.width-flud
       admin-details(v-on:operator="operator"
       v-bind:tableData="detailsTable"
@@ -29,7 +29,7 @@
 </template>
 <script>
 import CTable from '../common/CTable'
-import Service from '@/service/admin.service'
+import Service from '@/service/users.service'
 export default {
   data () {
       return {
@@ -37,9 +37,15 @@ export default {
         detailsTable: [],
         detailsThead: [],
         operateList: [],
-        addAdminPath: '/plat/addUser',
+        addAdminPath: '/plat/addUser/',
         pagination: 4,
-        loading: true
+        loading: true,
+        payload: {
+          user_name: '',
+          phone: '',
+          organization_name: '',
+          sno: ''
+        }
       }
   },
   components: {
@@ -47,21 +53,56 @@ export default {
   },
   methods: {
     operator (colItem, operateItem) {
-      console.log(colItem['name'])
-      console.log(operateItem.type)
+      if (operateItem.type === 'edit') {
+        this.$router.push(this.addAdminPath + colItem.user_id)
+        return
+      }
+      if (operateItem.type === 'delete') {
+        Service.deleteUser(colItem.user_id).then(
+          (res) => {
+            this.$toast('用户删除成功')
+            this.initQuery()
+          }
+        )
+        return
+      }
+    },
+    query () {
+      let data = {}
+      if (this.payload.user_name) {
+        data.user_name = this.payload.user_name
+      }
+      if (this.payload.phone) {
+        data.phone = this.payload.phone
+      }
+      if (this.payload.organization_name) {
+        data.organizationName = this.payload.organization_name
+      }
+      if (this.payload.sno) {
+        data.sno = this.payload.sno
+      }
+      this.initQuery(data)
     },
     addAdmin () {
-      this.$router.push(this.addAdminPath)
+      this.$router.push(this.addAdminPath + 'default')
     },
     hideLoading () {
       this.loading = false
+    },
+    initQuery (data) {
+      Service.getAllUsers(data).then(
+        (res) => {
+          this.detailsTable = res.users
+          this.$toast('用户数据加载完成')
+          this.hideLoading()
+        }
+      )
     }
   },
   created () {
-    this.detailsTable = Service.getDetailsTableData()
+    this.initQuery({})
     this.detailsThead = Service.getDetailsTheadData()
     this.operateList = Service.getDetailsOprateList()
-    setTimeout(this.hideLoading, 400)
   }
 }
 </script>

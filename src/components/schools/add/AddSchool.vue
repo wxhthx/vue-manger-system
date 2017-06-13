@@ -13,12 +13,15 @@
                     label.col-sm-3.col-form-label(for="name") Logo
                     div.col-sm-9
                         upload
+        div.row
+            div.curses-detail-caontainer(v-if="payload.organization_id")
         div.btn-group.row.margin-top
             button.btn.btn-primary(type="submit") 保存
             button.btn.btn-primary(@click.prevent="exit") 取消
 </template>
 <script>
 import Upload from '@/components/common/Upload'
+import organizationService from '@/service/organization.service'
 export default {
   data () {
       return {
@@ -38,7 +41,25 @@ export default {
       },
 
       save () {
+        let self = this
+        if (!self.payload.organization_id) {
+            let data = {name: self.payload.name}
+            organizationService.saveOrganizaiotn(data).then(
+                (res) => {
 
+                }
+            )
+        } else {
+            let data = {
+                name: self.payload.name,
+                organization_id: self.payload.organization_id
+            }
+            organizationService.updateOrganizaiotn(data).then(
+                (res) => {
+
+                }
+            )
+        }  
       },
 
       exit () {
@@ -52,7 +73,12 @@ export default {
         
       } else {
         // 编辑页面
-
+        this.payload.organization_id = this.$router.params.id
+        organizationService.getOrganizationById(this.payload.organization_id).then(
+            (res) => {
+                this.payload.name = res.data.name
+            }
+        )
       }
   },
   components: {
@@ -61,5 +87,8 @@ export default {
 }
 </script>
 <style lang="scss">
-
+.curses-detail-caontainer {
+    height: 300px;
+    background: #F3E5F5;
+}
 </style>

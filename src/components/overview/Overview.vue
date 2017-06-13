@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.container
+  div.container#container
     header.row.plat-header
       plat-header
     div.d-flex.justify-content-start

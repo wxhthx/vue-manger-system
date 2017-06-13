@@ -27,7 +27,7 @@ export default {
         detailsTable: [],
         detailsThead: [],
         operateList: [],
-        addAdminPath: '/plat/addSchool/default',
+        addAdminPath: '/plat/addSchool/',
         pagination: 4,
         loading: true
       }
@@ -37,25 +37,52 @@ export default {
   },
   methods: {
     operator (colItem, operateItem) {
-      console.log(colItem['name'])
-      console.log(operateItem.type)
+      if (operateItem.type === 'edit') {
+        this.$router.push(this.addAdminPath + colItem.organization_id)
+        return
+      }
+      if (operateItem.type === 'delete') {
+        Service.deleteOrganization().then(
+          (res) => {
+            this.initQuery()
+          }
+        )
+        return
+      }
     },
     addAdmin () {
-      this.$router.push(this.addAdminPath)
+      // this.$router.push(this.addAdminPath + 'default')
+      this.$modal({
+        message: '请确认继续',
+        header: '提示',
+        footer: {
+          btns: [
+            {text: '确认', type: 'confirm'},
+            {text: '取消', type: 'exit'}
+          ]
+        }
+      })
     },
     hideLoading () {
       this.loading = false
     },
     query () {
-    }
-  },
-  created () {
-    Service.getAll().then(
+    },
+    initQuery () {
+      Service.getAll().then(
         (res) => {
             this.detailsTable = res.school
             this.hideLoading()
+            this.$toast({
+              message: ' 成功加载学校数据',
+              theme: 'success'
+            })
         }
-    )
+      )
+    }
+  },
+  created () {
+    this.initQuery()
     this.detailsThead = Service.getTheadData()
     this.operateList = Service.getOperateList()
   }

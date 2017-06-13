@@ -1,5 +1,6 @@
 <template lang="pug">
   div.width_flud
+    modal(v-on:btnFunc="btnFunc" :header="modal.header" :message="modal.message" :footer="modal.footer")
     form(@submit.prevent="validateBeforeSubmit")
         div.row
             div.col   
@@ -67,6 +68,7 @@
 import courseService from '@/service/course.service'
 import Upload from '@/components/common/Upload'
 import AddNode from './AddNode'
+import Modal from '@/components/common/modal/Modal'
 export default {
   data () {
     return {
@@ -84,10 +86,23 @@ export default {
         },
         categories: [],
         tutors: [],
-        nodeData: []
+        nodeData: [],
+        modal: {
+            header: '提示',
+            footer: {
+                btns: [
+                    {text: '确认', type: 'confirm'},
+                    {text: '取消', type: 'quit'}
+                ]
+            },
+            message: '确定要增加'
+        }
     }
   },
   methods: {
+      btnFunc (type) {
+          console.log(type)
+      },
       validateBeforeSubmit () {
         this.$validator.validateAll().then(() => {
             this.save()
@@ -207,7 +222,8 @@ export default {
   },
   components: {
     'common-upload': Upload,
-    'add-node': AddNode
+    'add-node': AddNode,
+    'modal': Modal
   }
 }
 </script>

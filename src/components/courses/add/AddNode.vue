@@ -3,28 +3,31 @@
   //- primaryMenu
   ul.primary-ul
     li.primary-li
-        a.primary-a.iconfont-node.icon-add-node.node-icon-margin-right(href="javascript:void(0)" @click="addSecondaryLi") {{primaryName}}
+        a.primary-a(href="javascript:void(0)" @click="taggleNode(nodeDataList)") {{primaryName}}
+        a.iconfont-node.icon-add-node.node-icon-margin-left(href="javascript:void(0)" @click="addSecondaryLi")
         //- secondNode
-        ul.secondary-ul(v-if="nodeDataList.children && nodeDataList.children.length")
+        ul.secondary-ul(v-if="nodeDataList.children && nodeDataList.children.length" :class="[nodeDataList.hidden ? hiddenClass : showClass]")
             li.secondary-li(v-for="(secItem, secIndex) in nodeDataList.children")
                 input.control-form(v-if="secItem.valid" v-model="secItem.chapter_name" :placeholder="secItem.placeholder" @blur="secondaryBlur(secItem)")
-                a.secondary-a.iconfont-node.icon-add-node(v-else href="javascript:void(0)" @click="addThirdaryLi(secItem)") {{secItem.chapter_name}}
-                a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" @click="deleteSecondary(secItem, secIndex, nodeDataList.children)")
-                a.iconfont-node.icon-edit.node-btn(v-if="!secItem.valid" @click="editSecondary(secItem)")
+                a.secondary-a(v-else href="javascript:void(0)" @click="taggleNode(secItem)") {{secItem.chapter_name}}
+                a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!secItem.valid" href="javascript:void(0)" @click="addThirdaryLi(secItem)")
+                a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="deleteSecondary(secItem, secIndex, nodeDataList.children)")
+                a.iconfont-node.icon-edit.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="editSecondary(secItem)")
                 //- //- thirdNode
-                ul.thirdary-ul(v-if="secItem.children && secItem.children.length")
+                ul.thirdary-ul(v-if="secItem.children && secItem.children.length" :class="[secItem.hidden ? hiddenClass : showClass]")
                     li.thirdary-li(v-for="(thirdItem, thirdIndex) in secItem.children")
                         input.control-form(v-if="thirdItem.valid" v-model="thirdItem.section_name" @blur="thirdBlur(thirdItem, secItem)")
-                        a.third-a.iconfont-node.icon-add-node(v-else href="javascript:void(0)" @click="addFourthLi(thirdItem)") {{thirdItem.section_name}}
-                        a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" @click="deleteThird(thirdItem, thirdIndex, secItem.children)")
-                        a.iconfont-node.icon-edit.node-btn(v-if="!thirdItem.valid" @click="editThird(thirdItem)")
+                        a.third-a(v-else href="javascript:void(0)" @click="taggleNode(thirdItem)") {{thirdItem.section_name}}
+                        a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!thirdItem.valid" href="javascript:void(0)" @click="addFourthLi(thirdItem)")
+                        a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="deleteThird(thirdItem, thirdIndex, secItem.children)")
+                        a.iconfont-node.icon-edit.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="editThird(thirdItem)")
                         //- fourthNode
-                        ul.fourth-ul(v-if="thirdItem.children && thirdItem.children.length")
+                        ul.fourth-ul(v-if="thirdItem.children && thirdItem.children.length" :class="[thirdItem.hidden ? hiddenClass : showClass]")
                             li.fourth-li(v-for="(fourthItem, fourthIndex) in thirdItem.children")
                                 input.control-form(v-if="fourthItem.valid" v-model="fourthItem.unit_name" @blur="fourthBlur(fourthItem, thirdItem)")
                                 label.fourth-a.iconfont-node.icon-add-node(v-else) {{fourthItem.unit_name}}
-                                a.iconfont-node.icon-delete.node-btn(v-if="!fourthItem.valid" @click="deleteFourth(fourthItem, fourthIndex, thirdItem.children)")
-                                a.iconfont-node.icon-edit.node-btn(v-if="!fourthItem.valid" @click="editFourth(fourthItem)")
+                                a.iconfont-node.icon-delete.node-btn(v-if="!fourthItem.valid" href="javascript:void(0)" @click="deleteFourth(fourthItem, fourthIndex, thirdItem.children)")
+                                a.iconfont-node.icon-edit.node-btn(v-if="!fourthItem.valid" href="javascript:void(0)" @click="editFourth(fourthItem)")
 </template>
 <script>
 import courseService from '@/service/course.service'
@@ -45,7 +48,9 @@ export default {
               unit_name: '',
               valid: true
           },
-          validPointer: true
+          validPointer: true,
+          hiddenClass: 'hidden',
+          showClass: 'show'
       }
   },
   computed: {
@@ -59,6 +64,13 @@ export default {
       }
   },
   methods: {
+      taggleNode (node) {
+        if (node.hidden === undefined) {
+            this.$set(node, 'hidden', true)
+        } else {
+            node.hidden = !node.hidden
+        }
+      },
       addSecondaryLi () {
           if (!this.validPointer) {
               return
@@ -114,7 +126,9 @@ export default {
             item.valid = true
         }
       },
+      taggleChapter () {
 
+      },
       addThirdaryLi (item) {
           if (!this.validPointer) {
               return
@@ -249,6 +263,7 @@ export default {
 <style lang="scss" scoped>
 .primary-ul {
     text-align: left;
+    transition: 0.3s;
     & > .primary-li {
         cursor: pointer;
     }
@@ -259,7 +274,13 @@ export default {
 .node-btn {
     margin-left: 10px;
 }
-.node-icon-margin-right {
-    margin-right: 8px;
+.node-icon-margin-left {
+    margin-left: 8px;
+}
+.hidden {
+    display: none;
+}
+.show {
+    display: block;
 }
 </style>
