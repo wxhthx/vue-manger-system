@@ -240,9 +240,7 @@ export default {
 .center-widget {
     height: 400px;
 }
-.picrute {
-    height: 100px;
-}
+
 .add-node {
     overflow: auto;
 }

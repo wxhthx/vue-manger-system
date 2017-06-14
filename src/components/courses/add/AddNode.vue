@@ -31,6 +31,7 @@
 </template>
 <script>
 import courseService from '@/service/course.service'
+import loadingMixin from '@/config/mixins/loading.mixin'
 export default {
   props: ['course_id', 'primaryName', 'nodeDataList'],
   data () {
@@ -53,6 +54,9 @@ export default {
           showClass: 'show'
       }
   },
+  mixins: [
+      loadingMixin
+  ],
   computed: {
       commonPayload () {
           return {
@@ -92,6 +96,7 @@ export default {
             let payload = Object.assign({}, this.commonPayload, {chapter_name: item.chapter_name})
             courseService.addChapters(payload).then(
                 (res) => {
+                    self.hiddenLoading()
                     self.validPointer = true
                     item.valid = false
                     item.chapter_id = res.chapter_id
@@ -102,6 +107,7 @@ export default {
             let payload = Object.assign({}, this.commonPayload, {chapter_name: item.chapter_name, part_id_list: item.part_id_list})
             courseService.updateChapters(item.chapter_id, payload).then(
                (res) => {
+                   self.hiddenLoading()
                    self.validPointer = true
                    item.valid = false
                    console.log(res)
@@ -111,8 +117,10 @@ export default {
       },
 
       deleteSecondary (item, index, array) {
+          let self = this
           courseService.deleteChapters(item.chapter_id).then(
               (res) => {
+                  self.hiddenLoading()
                   array.splice(index, 1)
                   console.log('chapter deleted')
               }
@@ -143,8 +151,10 @@ export default {
       },
 
       deleteThird (item, index, array) {
+        let self = this
         courseService.deleteSections(item.section_id).then(
             (res) => {
+                self.hiddenLoading()
                 array.splice(index, 1)
                 console.log('section deleted')
             }
@@ -168,6 +178,7 @@ export default {
             let payload = Object.assign({}, this.commonPayload, {section_name: item.section_name, chapter_id: chapter.chapter_id})
             courseService.addSections(payload).then(
                 (res) => {
+                    self.hiddenLoading()
                     self.validPointer = true
                     // item.valid = false
                     self.$set(item, 'valid', false)
@@ -185,6 +196,7 @@ export default {
             })
             courseService.updateSections(item.section_id, payload).then(
                 (res) => {
+                    self.hiddenLoading()
                     self.validPointer = true
                     item.valid = false
                     console.log(res)
@@ -214,6 +226,7 @@ export default {
             let payload = Object.assign({}, this.commonPayload, {unit_name: item.unit_name, chapter_id: unit.chapter_id, section_id: unit.section_id})
             courseService.addUnits(payload).then(
                 (res) => {
+                    self.hiddenLoading()
                     self.validPointer = true
                     // item.valid = false
                     self.$set(item, 'valid', false)
@@ -233,6 +246,7 @@ export default {
             })
             courseService.updateUnits(item.unit_id, payload).then(
                 (res) => {
+                    self.hiddenLoading()
                     self.validPointer = true
                     item.valid = false
                     console.log(res)
@@ -242,8 +256,10 @@ export default {
       },
 
       deleteFourth (item, index, array) {
+        let self = this
         courseService.deleteUnits(item.unit_id).then(
             (res) => {
+                self.hiddenLoading()
                 array.splice(index, 1)
                 console.log('section deleted')
             }

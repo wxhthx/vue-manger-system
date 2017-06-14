@@ -16,7 +16,8 @@ export default {
   },
   methods: {
       ...mapActions([
-          'updateUploadData'
+          'updateUploadData',
+          'hiddenLoading'
       ]),
       set_upload_param (myDropzone, filename) {
         let self = this
@@ -108,6 +109,7 @@ export default {
                     theme: 'success'
                 })
                 vm.$emit('getImageUrl', vm.host + '/' + vm.fileName)
+                vm.hiddenLoading()
             })
         }
     })

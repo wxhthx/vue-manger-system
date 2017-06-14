@@ -10,7 +10,8 @@ import SchoolsManager from '@/components/schools/SchoolsManager'
 import AddSchool from '@/components/schools/add/AddSchool'
 import CourseResources from '@/components/resources/course/CourseResources'
 import ExamResources from '@/components/resources/exam/ExamResources'
-import TeacherResources from '@/components/resources/teacher/TeacherResources'
+import TutorsResources from '@/components/resources/tutors/TutorsResources'
+import AddTutor from '@/components/resources/tutors/add/AddTutor'
 import CourseTypes from '@/components/resources/courseTypes/CourseTypes'
 import AddAdmin from '@/components/admin/add/AddAdmin'
 import Details from '@/components/admin/details/Details'
@@ -119,11 +120,19 @@ export const RouterData = [
                 }
             },
             {   
-                path: 'teacherResources',
-                name: 'teacherResources',
+                path: 'TutorsResources',
+                name: 'TutorsResources',
                 components: {
                     navbar: Navbar,
-                    main: TeacherResources
+                    main: TutorsResources
+                }
+            },
+            {
+                path: 'addTutor/:id',
+                name: 'addTutor',
+                components: {
+                    navbar: Navbar,
+                    main: AddTutor
                 }
             },
             {   

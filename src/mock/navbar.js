@@ -68,9 +68,9 @@ export const Navbar = [
                 path: '/plat/examResources'
             },
             {
-                id: 'teacherResources',
+                id: 'TutorsResources',
                 text: '讲师资料',
-                path: '/plat/teacherResources'
+                path: '/plat/TutorsResources'
             },
             {
                 id: 'courseTypes',
