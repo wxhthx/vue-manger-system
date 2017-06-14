@@ -46,7 +46,7 @@ export default {
             let data = {name: self.payload.name}
             organizationService.saveOrganizaiotn(data).then(
                 (res) => {
-
+                    self.$router.push('/plat/schools')
                 }
             )
         } else {
@@ -56,7 +56,7 @@ export default {
             }
             organizationService.updateOrganizaiotn(data).then(
                 (res) => {
-
+                    self.$router.push('/plat/schools')
                 }
             )
         }  
@@ -69,14 +69,14 @@ export default {
   created () {
       let self = this
       // 新增页面  
-      if (self.$route.params.id !== 'default') {
+      if (self.$route.params.id === 'default') {
         
       } else {
         // 编辑页面
-        this.payload.organization_id = this.$router.params.id
-        organizationService.getOrganizationById(this.payload.organization_id).then(
+        self.payload.organization_id = self.$route.params.id
+        organizationService.getOrganizationById(self.payload.organization_id).then(
             (res) => {
-                this.payload.name = res.data.name
+                self.payload.name = res.data.name
             }
         )
       }

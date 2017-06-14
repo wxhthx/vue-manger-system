@@ -16,13 +16,18 @@ class Users {
             params: data
         })
     }
+
+    getSingleUser (userId) {
+        return axios({
+            method: 'get',
+            url: UsersPath.SINGLE_USER + userId
+        })
+    }
+
     deleteUser (user_id) {
         return axios({
             method: 'delete',
-            url: UsersPath.DELETE_USER,
-            params: {
-                userId: user_id
-            }
+            url: UsersPath.DELETE_USER + user_id
         })
     }
     saveUser (data) {
@@ -32,10 +37,10 @@ class Users {
             data: data
         })
     }
-    updateUser (data) {
+    updateUser (userId, data) {
         return axios({
-            method: 'post',
-            url: UsersPath.SAVE_USER,
+            method: 'put',
+            url: UsersPath.UPDATE_USER + userId,
             data: data
         })
     }

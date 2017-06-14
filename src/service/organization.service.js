@@ -2,10 +2,14 @@ import axios from 'axios'
 import Path from './apiPath/organization.path'
 import Mock from '@/mock/organization.mock'
 class OrgannizationService {
-    getAll () {
+    getAll (data) {
+        if (!data) {
+            data = {}
+        }
         return axios({
             method: 'get',
-            url: Path.ALL_ORGANIZAIOTN
+            url: Path.ALL_ORGANIZAIOTN,
+            params: data
         })
     }
     getTheadData () {
@@ -17,7 +21,7 @@ class OrgannizationService {
     saveOrganizaiotn (data) {
         return axios({
             method: 'post',
-            url: Path.ALL_ORGANIZAIOTN,
+            url: Path.SAVE_ORGANIZATION,
             data: data
         })
     }
@@ -37,7 +41,7 @@ class OrgannizationService {
     deleteOrganization (organization_id) {
         return axios({
             method: 'delete',
-            url: Path.ALL_ORGANIZAIOTN + '/' + organization_id
+            url: Path.DELETE_ORGANIZATION + '/' + organization_id
         })
     }
 }

@@ -4,7 +4,7 @@
       div.form-group.row
         label.col-sm-1.col-form-label(for="input-name") 姓名:
         div.col-sm-3
-          input.form-control(type="text" id="input-name")
+          input.form-control(type="text" id="input-name" v-model="payload.name")
       div.form-group.row.justify-content-end.padding-right
         button.btn.btn-primary(@click="query") 搜索
     div.width-flud
@@ -28,7 +28,10 @@ export default {
         operateList: [],
         addAdminPath: '/plat/addSchool/',
         pagination: 4,
-        loading: true
+        payload: {
+          name: ''
+        },
+        btnQuery: false
       }
   },
   mixins: [
@@ -44,8 +47,9 @@ export default {
         return
       }
       if (operateItem.type === 'delete') {
-        Service.deleteOrganization().then(
+        Service.deleteOrganization(colItem.id).then(
           (res) => {
+            this.btnQuery = true
             this.initQuery()
           }
         )
@@ -66,12 +70,19 @@ export default {
       // })
     },
     query () {
+      this.btnQuery = true
+      let data = {name: this.payload.name}
+      this.initQuery(data)
     },
     getAllPromise () {},
-    initQuery () {
-      this.getAllPromise = Service.getAll().then(
+    initQuery (data) {
+      this.getAllPromise = Service.getAll(data).then(
         (res) => {
-            this.detailsTable = res.school
+            if (this.btnQuery) {
+              this.hiddenLoading()
+              this.btnQuery = false
+            }
+            this.detailsTable = res.organizations
             this.$toast({
               message: ' 成功加载学校数据',
               theme: 'success'

@@ -69,6 +69,8 @@ import courseService from '@/service/course.service'
 import Upload from '@/components/common/Upload'
 import AddNode from './AddNode'
 import Modal from '@/components/common/modal/Modal'
+import loadingMixin from '@/config/mixins/loading.mixin'
+
 export default {
   data () {
     return {
@@ -99,6 +101,9 @@ export default {
         }
     }
   },
+  mixins: [
+      loadingMixin
+  ],
   methods: {
       btnFunc (type) {
           console.log(type)
@@ -196,12 +201,14 @@ export default {
         (res) => {
             self.categories = res.data
             self.payload.category_id = self.categories[0].category_id
+            self.hiddenLoading()
         }
     )
     let tutorPromise = courseService.getAllTutors().then(
         (res) => {
             self.tutors = res.data
             self.payload.tutor_id = self.tutors[0].tutor_id
+            self.hiddenLoading()
         }
     )
     let toast = {
@@ -210,10 +217,12 @@ export default {
     }
     if (couserPromise) {
         Promise.all([couserPromise, categoryPromise, tutorPromise]).then(
+
             self.$toast(toast)
         )
     } else {
         Promise.all([categoryPromise, tutorPromise]).then(
+
             self.$toast(toast)
         )
     }

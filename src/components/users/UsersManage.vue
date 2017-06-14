@@ -24,7 +24,7 @@
       v-bind:theadData="detailsThead"
       v-bind:operateList="operateList")
     div.d-flex.justify-content-end.margin-bottom
-      button.btn.btn-primary(@click="addAdmin") 添加管理员
+      button.btn.btn-primary(@click="addAdmin") 添加用户
 </template>
 <script>
 import CTable from '../common/CTable'
@@ -64,6 +64,7 @@ export default {
         return
       }
       if (operateItem.type === 'delete') {
+        this.defaultQuery = true
         Service.deleteUser(colItem.user_id).then(
           (res) => {
             this.$toast('用户删除成功')
@@ -82,8 +83,8 @@ export default {
       if (this.payload.phone) {
         data.phone = this.payload.phone
       }
-      if (this.payload.organization_name) {
-        data.organizationName = this.payload.organization_name
+      if (this.payload.organization_id) {
+        data.organizationId = this.payload.organization_id
       }
       if (this.payload.sno) {
         data.sno = this.payload.sno
@@ -101,14 +102,18 @@ export default {
     initQuery (data) {
       this.getAllPromise = Service.getAllUsers(data).then(
         (res) => {
+          if (this.defaultQuery) {
+            this.hiddenLoading()
+            this.defaultQuery = false
+          }
           this.detailsTable = res.users
           console.log('getAllPromise resolved')
         }
       )
       this.orgaPromise = OrganizationService.getAll().then(
         (res) => {
-          this.payload.organizations = res.school
-          this.payload.organization_id = this.payload.organizations[0].id
+          this.payload.organizations = res.organizations
+          // this.payload.organization_id = this.payload.organizations[0].id
           console.log('orgaPromise resolved')
         }
       )
@@ -129,8 +134,8 @@ export default {
     getOrganizations () {
       return OrganizationService.getAll().then(
         (res) => {
-          this.payload.organizations = res.school
-          this.payload.organization_id = this.payload.organizations[0].id
+          this.payload.organizations = res.organizations
+          // this.payload.organization_id = this.payload.organizations[0].id
         }
       )
     }
