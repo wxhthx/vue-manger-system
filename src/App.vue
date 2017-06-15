@@ -22,4 +22,5 @@ export default {
 */
 @import './assets/sass/bootstrap/bootstrap.scss';
 @import './assets/sass/custommade/main.scss';
+@import './assets/css/animate.css'
 </style>

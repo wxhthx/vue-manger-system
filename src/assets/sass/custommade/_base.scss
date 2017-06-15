@@ -17,6 +17,12 @@ $border-color: #F5F5F5;
 .inline-block {
     display: inline-block;
 }
+ul {
+    padding-left: 0;
+}
+li {
+    list-style: none;
+}
 .text-left {
     text-align: left;
 }

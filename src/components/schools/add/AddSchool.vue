@@ -22,6 +22,7 @@
 <script>
 import Upload from '@/components/common/Upload'
 import organizationService from '@/service/organization.service'
+import loadingMixin from '@/config/mixins/loading.mixin'
 export default {
   data () {
       return {
@@ -31,6 +32,9 @@ export default {
         }
       }
   },
+  mixins: [
+      loadingMixin
+  ],
   methods: {
       validateBeforeSubmit () {
         this.$validator.validateAll().then(() => {
@@ -51,10 +55,9 @@ export default {
             )
         } else {
             let data = {
-                name: self.payload.name,
-                organization_id: self.payload.organization_id
+                name: self.payload.name
             }
-            organizationService.updateOrganizaiotn(data).then(
+            organizationService.updateOrganizaiotn(self.payload.organization_id, data).then(
                 (res) => {
                     self.$router.push('/plat/schools')
                 }
@@ -63,7 +66,7 @@ export default {
       },
 
       exit () {
-          console.log('exit')
+          this.$router.push('/plat/schools')
       }
   },
   created () {
@@ -76,7 +79,8 @@ export default {
         self.payload.organization_id = self.$route.params.id
         organizationService.getOrganizationById(self.payload.organization_id).then(
             (res) => {
-                self.payload.name = res.data.name
+                self.hiddenLoading()
+                self.payload.name = res.name
             }
         )
       }

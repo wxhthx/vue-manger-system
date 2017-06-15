@@ -45,15 +45,29 @@ export default {
     operator (colItem, operateItem) {
       let self = this
       if (operateItem.type === 'delete') {
-        tutorService.deleteTutor(colItem.tutor_id).then(
-          (res) => {
-            self.queryForTable({})
-          }
-        )
+        this.$modal({
+            header: '提示',
+            message: '是否要删除该讲师?',
+            footer: [
+                {type: 'ok', text: '确认', method: this.deleteTutor, argu: [colItem]},
+                {type: 'cancel', text: '取消'}
+            ]
+        })
       }
       if (operateItem.type === 'edit') {
         this.$router.push(this.addAdminPath + colItem.tutor_id)
       }
+    },
+    deleteTutor (colItem) {
+      let self = this
+      self.$modal({
+        visible: false
+      })
+      tutorService.deleteTutor(colItem[0].tutor_id).then(
+        (res) => {
+          self.queryForTable({})
+        }
+      )
     },
     addAdmin () {
       this.$router.push(this.addAdminPath + 'default')

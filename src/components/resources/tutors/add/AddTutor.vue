@@ -64,14 +64,14 @@ export default {
             tutorService.saveTutor(data).then(
                 (res) => {
                     self.hiddenLoading()
-                    self.$router.push('/plat/teacherResources')
+                    self.$router.push('/plat/TutorsResources')
                 }
             )
         } else {
             tutorService.updateTutor(self.payload.tutor_id, data).then(
                 (res) => {
                     self.hiddenLoading()
-                    self.$router.push('/plat/teacherResources')
+                    self.$router.push('/plat/TutorsResources')
                 }
             )
         }  
@@ -80,7 +80,7 @@ export default {
           this.payload.photo_url = url
       },
       exit () {
-          this.$router.push('/plat/teacherResources')
+          this.$router.push('/plat/TutorsResources')
       }
   },
   created () {

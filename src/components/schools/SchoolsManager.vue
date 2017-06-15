@@ -43,31 +43,34 @@ export default {
   methods: {
     operator (colItem, operateItem) {
       if (operateItem.type === 'edit') {
-        this.$router.push(this.addAdminPath + colItem.organization_id)
+        this.$router.push(this.addAdminPath + colItem.id)
         return
       }
       if (operateItem.type === 'delete') {
-        Service.deleteOrganization(colItem.id).then(
-          (res) => {
-            this.btnQuery = true
-            this.initQuery()
-          }
-        )
+        this.$modal({
+          header: '提示',
+          message: '确认删除该学校？',
+          footer: [
+            {type: 'ok', text: '确认', method: this.deleteOrganization, argu: [colItem]},
+            {type: 'cancel', text: '取消', method: this.quit}
+          ]
+        })
         return
       }
     },
+    deleteOrganization (colItem) {
+      this.$modal({
+        visible: false
+      })
+      Service.deleteOrganization(colItem[0].id).then(
+        (res) => {
+          this.btnQuery = true
+          this.initQuery()
+        }
+      )
+    },
     addAdmin () {
       this.$router.push(this.addAdminPath + 'default')
-      // this.$modal({
-      //   message: '请确认继续',
-      //   header: '提示',
-      //   footer: {
-      //     btns: [
-      //       {text: '确认', type: 'confirm'},
-      //       {text: '取消', type: 'exit'}
-      //     ]
-      //   }
-      // })
     },
     query () {
       this.btnQuery = true

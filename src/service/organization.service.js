@@ -25,23 +25,23 @@ class OrgannizationService {
             data: data
         })
     }
-    updateOrganizaiotn (data) {
+    updateOrganizaiotn (id, data) {
         return axios({
             method: 'put',
-            url: Path.ALL_ORGANIZAIOTN,
+            url: Path.UPDATE_ORGANIZATION + id,
             data: data
         })
     }
     getOrganizationById (organization_id) {
         return axios({
             method: 'get',
-            url: Path.ALL_ORGANIZAIOTN + '/' + organization_id
+            url: Path.GET_ORGANIZATION_BY_ID + organization_id
         })
     }
     deleteOrganization (organization_id) {
         return axios({
             method: 'delete',
-            url: Path.DELETE_ORGANIZATION + '/' + organization_id
+            url: Path.DELETE_ORGANIZATION + organization_id
         })
     }
 }

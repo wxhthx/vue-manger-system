@@ -79,7 +79,7 @@ export default {
           if (!this.validPointer) {
               return
           }
-          let secondaryItem = Object.assign({}, this.secondaryItem, {thirdaryList: []})
+          let secondaryItem = Object.assign({}, this.secondaryItem, {children: []})
           if (!this.nodeDataList.children) {
             this.nodeDataList.children = []
           }

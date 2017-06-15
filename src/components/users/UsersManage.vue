@@ -64,15 +64,29 @@ export default {
         return
       }
       if (operateItem.type === 'delete') {
-        this.defaultQuery = true
-        Service.deleteUser(colItem.user_id).then(
+        this.$modal({
+          header: '提示',
+          message: '确认删除该用户？',
+          footer: [
+            {type: 'ok', text: '确认', method: this.deleteUser, argu: [colItem]},
+            {type: 'cancel', text: '取消'}
+          ]
+        })
+        
+        return
+      }
+    },
+    deleteUser (colItem) {
+      this.defaultQuery = true
+      this.$modal({
+        visible: false
+      })
+        Service.deleteUser(colItem[0].user_id).then(
           (res) => {
             this.$toast('用户删除成功')
             this.initQuery()
           }
         )
-        return
-      }
     },
     query () {
       this.defaultQuery = true

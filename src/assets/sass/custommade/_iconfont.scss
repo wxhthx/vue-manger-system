@@ -13,6 +13,26 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.iconfont-navbar {
+  
+   &.arrow {
+     &:before {
+       font-family:"iconfont-admin" !important;
+       font-size:18px;
+       font-style:normal;
+       font-weight: bolder;
+       -webkit-font-smoothing: antialiased;
+       -moz-osx-font-smoothing: grayscale;
+       content: "\e610";
+       position: absolute;
+       right: 1rem;
+       transition: transform 0.2s linear;
+     } 
+     &.dirty:before {
+       transform: rotate(180deg)
+     }
+   }
+}
 .iconfont-node {
   font-family:"iconfont-admin" !important;
   font-size:14px;
@@ -29,14 +49,14 @@
 .icon-delete:before { content: "\e60c"; }
 .icon-edit:before { content: "\e6f5"; }
 
-.dirty:before { 
-    content: "\e60e";
-    position: absolute;
-    right: 1rem;
-}
+// .dirty:before { 
+//     content: "\e60e";
+//     position: absolute;
+//     right: 1rem;
+// }
 
-.dry:before {
-    content: "\e610";
-    position: absolute;
-    right: 1rem;
-}
+// .dry:before {
+//     content: "\e610";
+//     position: absolute;
+//     right: 1rem;
+// }

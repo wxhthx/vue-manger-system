@@ -2,12 +2,13 @@
     div.width_flud
         ul.nav.flex-column
             li.nav-item(v-for="(primaryItem, primaryIndex) in navbar" @click="activeNavbar(primaryItem)") 
-                span.nav-link(v-if="primaryItem.children" v-bind:class="[selectedIndex === primaryItem.selectedId ? selectedClass : notSelectedClass, 'iconfont-admin']") {{primaryItem.text}}
+                span.nav-link(v-if="primaryItem.children" v-bind:class="[selectedIndex === primaryItem.selectedId ? selectedClass : notSelectedClass, 'iconfont-navbar', 'arrow']") {{primaryItem.text}}
                 router-link.nav-link(v-if="!primaryItem.children" v-bind:to="primaryItem.path") {{primaryItem.text}}
-                ul.second-navbar(v-else)
-                    li(v-for="(secondItem, secondIndex) in primaryItem.children")
-                        //- span(v-if="secondItem.children") {{secondItem.text}}
-                        router-link.menu-item.nav-link(v-if="!secondItem.children" v-bind:to="secondItem.path") {{secondItem.text}}
+                transition(name="navbar-second" enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeInUpBig")
+                    ul.second-navbar(v-if="primaryItem.children && selectedIndex === primaryItem.selectedId")
+                        li(v-for="(secondItem, secondIndex) in primaryItem.children")
+                            //- span(v-if="secondItem.children") {{secondItem.text}}
+                            router-link.menu-item.nav-link(v-if="!secondItem.children" v-bind:to="secondItem.path") {{secondItem.text}}
 </template>
 <script>
 import navbarService from '@/service/navbar.service'
@@ -39,29 +40,43 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-ul {
-    padding-left: 0;
+<style lang="scss" scoped>
+$navbar-color: #424242;
+.nav {
+    color: $navbar-color
 }
-li {
-    list-style: none;
+
+a {
+    color: $navbar-color;
+    &:active, &:focus, &:hover {
+        color: $navbar-color;
+    }
 }
+
 ul.nav {
     & > li {
         cursor: pointer;
-    }
-    ul.second-navbar {
-        margin-left: 15px;
-        & > li {
-            display: none;
+        &:active, &:focus, &:hover {
+            background: rgba(0, 0, 0, 0.1);
+            & > ul {
+                background: #fff;
+            }
         }
     }
     .dirty + ul.second-navbar {
         & > li {
-            display: block;
+            & > a {
+                margin-left: 15px;
+            }
             & > a.active {
                 color: #F17C67;
-            } 
+                transform: translate(-10px, 0) scale(1.02);
+                transition: transform 0.2s linear;
+            }
+            &:active, &:focus, &:hover {
+               background: rgba(0, 0, 0, 0.1);
+               color: #fff; 
+            }
         }
     }
 }

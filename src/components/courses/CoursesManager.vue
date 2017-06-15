@@ -64,6 +64,30 @@ export default {
       },
       operator (item, btn) {
         let self = this
+        if (btn.type === 'edit') {
+            this.$router.push(this.addCoursePath + item.course_id)
+            return
+        }
+        if (btn.type === 'delete') {
+            this.$modal({
+                header: '提示',
+                message: '是否要删除该课程?',
+                footer: [
+                    {type: 'ok', text: '确认', method: this.deleteCourse, argu: [item]},
+                    {type: 'cancel', text: '取消'}
+                ]
+            })
+        }
+        if (btn.type === 'soldOut') {
+            console.log('下架功能暂不支持')
+        }
+      },
+      deleteCourse (item) {
+        let self = this
+        self.loading = true
+        self.$modal({
+            visible: false
+        })
         let successToast = {
             message: '成功删除该课程',
             theme: 'success'
@@ -72,28 +96,18 @@ export default {
             message: '删除该课程失败',
             theme: 'warning'
         }
-        if (btn.type === 'edit') {
-            this.$router.push(this.addCoursePath + item.course_id)
-            return
-        }
-        if (btn.type === 'delete') {
-            self.loading = true
-            courseService.deleteSimpleCourse(item.course_id).then(
-                (res) => {
-                    self.$toast(successToast)
-                    courseService.getCourses().then(
-                        (getres) => {
-                            self.initData(getres) 
-                        }
-                    )
-                }, () => {
-                    self.$toast(failedToast)
-                }
-            )
-        }
-        if (btn.type === 'soldOut') {
-            console.log('下架功能暂不支持')
-        }
+        courseService.deleteSimpleCourse(item[0].course_id).then(
+            (res) => {
+                self.$toast(successToast)
+                courseService.getCourses().then(
+                    (getres) => {
+                        self.initData(getres) 
+                    }
+                )
+            }, () => {
+                self.$toast(failedToast)
+            }
+        )
       },
       addCourse () {
         this.$router.push(this.addCoursePath + 'default')
