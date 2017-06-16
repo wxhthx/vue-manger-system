@@ -7,20 +7,21 @@
         a.iconfont-node.icon-add-node.node-icon-margin-left(href="javascript:void(0)" @click="addSecondaryLi")
         //- secondNode
         ul.secondary-ul(v-if="nodeDataList && nodeDataList.length" :class="[nodeDataList.hidden ? hiddenClass : showClass]")
-            li.secondary-li(v-for="(secItem, secIndex) in nodeDataList")
-                input.control-form(v-if="secItem.valid" v-model="secItem.class_name" :placeholder="secItem.placeholder" @blur="secondaryBlur(secItem)")
-                a.secondary-a(v-else href="javascript:void(0)" @click="taggleNode(secItem)") {{secItem.class_name}}
-                a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!secItem.valid" href="javascript:void(0)" @click="addThirdaryLi(secItem)")
-                a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="deleteSecondary(secItem, secIndex, nodeDataList)")
-                a.iconfont-node.icon-edit.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="editSecondary(secItem)")
-                //- //- thirdNode
-                ul.thirdary-ul(v-if="secItem.children && secItem.children.length" :class="[secItem.hidden ? hiddenClass : showClass]")
-                    li.thirdary-li(v-for="(thirdItem, thirdIndex) in secItem.children")
-                        input.control-form(v-if="thirdItem.valid" v-model="thirdItem.category_name" @blur="thirdBlur(thirdItem, secItem)")
-                        label.third-a(v-else href="javascript:void(0)" @click="taggleNode(thirdItem)") {{thirdItem.category_name}}
-                        //- a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!thirdItem.valid" href="javascript:void(0)" @click="addFourthLi(thirdItem)")
-                        a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="deleteThird(thirdItem, thirdIndex, secItem.children)")
-                        a.iconfont-node.icon-edit.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="editThird(thirdItem)")
+            transition-group(name="list-primary")
+              li.secondary-li(v-for="(secItem, secIndex) in nodeDataList" v-bind:key="secIndex")
+                  input.control-form(v-if="secItem.valid" v-model="secItem.class_name" :placeholder="secItem.placeholder" @blur="secondaryBlur(secItem)")
+                  a.secondary-a(v-else href="javascript:void(0)" @click="taggleNode(secItem)") {{secItem.class_name}}
+                  a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!secItem.valid" href="javascript:void(0)" @click="addThirdaryLi(secItem)")
+                  a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="deleteSecondary(secItem, secIndex, nodeDataList)")
+                  a.iconfont-node.icon-edit.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="editSecondary(secItem)")
+                  //- //- thirdNode
+                  ul.thirdary-ul(v-if="secItem.children && secItem.children.length" :class="[secItem.hidden ? hiddenClass : showClass]")
+                      li.thirdary-li(v-for="(thirdItem, thirdIndex) in secItem.children")
+                          input.control-form(v-if="thirdItem.valid" v-model="thirdItem.category_name" @blur="thirdBlur(thirdItem, secItem)")
+                          label.third-a(v-else href="javascript:void(0)" @click="taggleNode(thirdItem)") {{thirdItem.category_name}}
+                          //- a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!thirdItem.valid" href="javascript:void(0)" @click="addFourthLi(thirdItem)")
+                          a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="deleteThird(thirdItem, thirdIndex, secItem.children)")
+                          a.iconfont-node.icon-edit.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="editThird(thirdItem)")
 </template>
 <script>
 import courseTypeService from '@/service/resources.courses.service'
@@ -217,5 +218,12 @@ export default {
 }
 .show {
     display: block;
+}
+.list-primary-enter, .list-primary-leave-active {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.list-primary-enter-active, .list-primary-leave-active {
+  transition: all 1s;
 }
 </style>

@@ -1,14 +1,14 @@
 <template lang="pug">
     div.width_flud
         ul.nav.flex-column
-            li.nav-item(v-for="(primaryItem, primaryIndex) in navbar" @click="activeNavbar(primaryItem)") 
-                span.nav-link(v-if="primaryItem.children" v-bind:class="[selectedIndex === primaryItem.selectedId ? selectedClass : notSelectedClass, 'iconfont-navbar', 'arrow']") {{primaryItem.text}}
-                router-link.nav-link(v-if="!primaryItem.children" v-bind:to="primaryItem.path") {{primaryItem.text}}
+            li.nav-item.iconfont-navbar.arrow(v-for="(primaryItem, primaryIndex) in navbar" :class="[selectedIndex === primaryItem.selectedId ? selectedClass : notSelectedClass]" @click="activeNavbar(primaryItem)") 
+                span.nav-link(v-bind:class="[primaryItem.id]") {{primaryItem.text}}
+                //- router-link.nav-link(v-if="!primaryItem.children" v-bind:to="primaryItem.path") {{primaryItem.text}}
                 transition(name="navbar-second" enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeInUpBig")
                     ul.second-navbar(v-if="primaryItem.children && selectedIndex === primaryItem.selectedId")
                         li(v-for="(secondItem, secondIndex) in primaryItem.children")
                             //- span(v-if="secondItem.children") {{secondItem.text}}
-                            router-link.menu-item.nav-link(v-if="!secondItem.children" v-bind:to="secondItem.path") {{secondItem.text}}
+                            router-link.menu-item.nav-link(v-if="!secondItem.children" v-bind:to="secondItem.path" :class="[secondItem.id]") {{secondItem.text}}
 </template>
 <script>
 import navbarService from '@/service/navbar.service'
@@ -63,7 +63,7 @@ ul.nav {
             }
         }
     }
-    .dirty + ul.second-navbar {
+    .dirty > ul.second-navbar {
         & > li {
             & > a {
                 margin-left: 15px;

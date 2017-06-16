@@ -1,10 +1,19 @@
+// @font-face {
+//   font-family: 'iconfont-admin';  /* project id 316598 */
+//   src: url('//at.alicdn.com/t/font_mndbi7enmkuik9.eot');
+//   src: url('//at.alicdn.com/t/font_mndbi7enmkuik9.eot?#iefix') format('embedded-opentype'),
+//   url('//at.alicdn.com/t/font_mndbi7enmkuik9.woff') format('woff'),
+//   url('//at.alicdn.com/t/font_mndbi7enmkuik9.ttf') format('truetype'),
+//   url('//at.alicdn.com/t/font_mndbi7enmkuik9.svg#iconfont-admin') format('svg');
+// }
+
 @font-face {
   font-family: 'iconfont-admin';  /* project id 316598 */
-  src: url('//at.alicdn.com/t/font_mndbi7enmkuik9.eot');
-  src: url('//at.alicdn.com/t/font_mndbi7enmkuik9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_mndbi7enmkuik9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_mndbi7enmkuik9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_mndbi7enmkuik9.svg#iconfont-admin') format('svg');
+  src: url('/static/fonts/iconfont.eot');
+  src: url('/static/fonts/iconfont.eot?#iefix') format('embedded-opentype'),
+  url('/static/fonts/iconfont.woff') format('woff'),
+  url('/static/fonts/iconfont.ttf') format('truetype'),
+  url('/static/fonts/iconfont.svg#iconfont-admin') format('svg');
 }
 .iconfont-admin {
   font-family:"iconfont-admin" !important;
@@ -25,11 +34,13 @@
        -moz-osx-font-smoothing: grayscale;
        content: "\e610";
        position: absolute;
+       margin-top: 8px;
        right: 1rem;
        transition: transform 0.2s linear;
      } 
      &.dirty:before {
-       transform: rotate(180deg)
+       transform: rotate(180deg);
+       margin-top: 5px;
      }
    }
 }
@@ -49,14 +60,73 @@
 .icon-delete:before { content: "\e60c"; }
 .icon-edit:before { content: "\e6f5"; }
 
-// .dirty:before { 
-//     content: "\e60e";
-//     position: absolute;
-//     right: 1rem;
-// }
+%men-icon {
+    font-family: 'iconfont-admin' !important;
+    font-size: 16px;
+    margin-right: 10px;
+}
+.privilege:before {
+    @extend %men-icon;
+    content: '\e642';
+}
 
-// .dry:before {
-//     content: "\e610";
-//     position: absolute;
-//     right: 1rem;
-// }
+.users:before {
+    @extend %men-icon;
+    content: '\e601';
+}
+
+
+.schools:before {
+    @extend %men-icon;
+    content: '\e667';
+}
+
+.courses:before {
+    @extend %men-icon;
+    content: '\e637';
+}
+
+.resources:before {
+    @extend %men-icon;
+    content: '\e699';
+}
+
+.admin:before {
+    @extend %men-icon;
+    content: '\e654';
+}
+.resources:before {
+    @extend %men-icon;
+    content: '\e699';
+}
+
+.usersManager:before {
+    @extend %men-icon;
+    content: '\e61f';
+}
+
+.schoolsManager:before {
+    @extend %men-icon;
+    content: '\e604';
+}
+
+.coursesManager:before {
+    @extend %men-icon;
+    content: '\e637';
+}
+
+.courseResources:before {
+    @extend %men-icon;
+    content: '\e637';
+}
+
+
+.TutorsResources:before {
+    @extend %men-icon;
+    content: '\e61b';
+}
+
+.courseTypes:before {
+    @extend %men-icon;
+    content: '\e63f';
+}

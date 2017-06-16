@@ -62,11 +62,11 @@ export const Navbar = [
                 text: '课程资料',
                 path: '/plat/courseResources'
             },
-            {
-                id: 'examResources',
-                text: '考试资料',
-                path: '/plat/examResources'
-            },
+            // {
+            //     id: 'examResources',
+            //     text: '考试资料',
+            //     path: '/plat/examResources'
+            // },
             {
                 id: 'TutorsResources',
                 text: '讲师资料',

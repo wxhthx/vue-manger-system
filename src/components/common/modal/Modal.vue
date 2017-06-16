@@ -58,7 +58,7 @@ $shadow-bg-color: rgba(189, 189, 189, 0.7);
         width: 0;
         height: 0;
         &:before {
-            content: url('../../../assets/images/svg/shutdown.svg');
+            content: url('/static/img/svg/shutdown.svg');
         }
     }
 }
