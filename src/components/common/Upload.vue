@@ -6,6 +6,7 @@ import courseService from '@/service/course.service'
 import Dropzone from '@/assets/lib/dropzone'
 import { mapGetters, mapActions } from 'vuex'
 export default {
+  props: ['acceptedFiles'],
   data () {
     return {
         idProperty: '',
@@ -97,6 +98,7 @@ export default {
     let preloader = new Dropzone("#" + vm.generatedId, {
         url: "/file/post",
         autoProcessQueue: false,
+        acceptedFiles: vm.acceptedFiles,
         init: function () {
             let myDropzone = this
             let files = myDropzone.files 

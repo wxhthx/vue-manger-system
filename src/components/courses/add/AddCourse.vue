@@ -19,7 +19,7 @@
                     label.col-sm-3.col-form-label(for="img") 封面
                     div.col-sm-9#imageContainer
                         img.picrute.form-control(v-if="payload.picture_url" :src="payload.picture_url")
-                        common-upload(v-else v-on:getImageUrl="getImageUrl")
+                        common-upload(v-else v-on:getImageUrl="getImageUrl" :accepted-files="acceptedFiles")
                         //- input.form-control.hidden-uploader(type="file" aria-describedby="fileHelp" @change="uploadImg")
             div.w-100
             div.col
@@ -98,7 +98,8 @@ export default {
                 ]
             },
             message: '确定要增加'
-        }
+        },
+        acceptedFiles: 'image/*'
     }
   },
   mixins: [

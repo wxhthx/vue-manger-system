@@ -9,23 +9,26 @@
         ul.secondary-ul(v-if="nodeDataList.children && nodeDataList.children.length" :class="[nodeDataList.hidden ? hiddenClass : showClass]")
             li.secondary-li(v-for="(secItem, secIndex) in nodeDataList.children")
                 input.control-form(v-if="secItem.valid" v-model="secItem.chapter_name" :placeholder="secItem.placeholder" @blur="secondaryBlur(secItem)")
-                a.secondary-a(v-else href="javascript:void(0)" @click="taggleNode(secItem)") {{secItem.chapter_name}}
+                a.iconfont-node.icon-delete.node-btn(v-if="secItem.valid && !secItem.chapter_id" href="javascript:void(0)" @click="backup(nodeDataList.children)")
+                a.secondary-a(v-if="!secItem.valid" href="javascript:void(0)" @click="taggleNode(secItem)") {{secItem.chapter_name}}
                 a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!secItem.valid" href="javascript:void(0)" @click="addThirdaryLi(secItem)")
                 a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="deleteSecondary(secItem, secIndex, nodeDataList.children)")
                 a.iconfont-node.icon-edit.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="editSecondary(secItem)")
                 //- //- thirdNode
                 ul.thirdary-ul(v-if="secItem.children && secItem.children.length" :class="[secItem.hidden ? hiddenClass : showClass]")
                     li.thirdary-li(v-for="(thirdItem, thirdIndex) in secItem.children")
-                        input.control-form(v-if="thirdItem.valid" v-model="thirdItem.section_name" @blur="thirdBlur(thirdItem, secItem)")
-                        a.third-a(v-else href="javascript:void(0)" @click="taggleNode(thirdItem)") {{thirdItem.section_name}}
+                        input.control-form(v-if="thirdItem.valid" v-model="thirdItem.section_name" :placeholder="thirdItem.placeholder" @blur="thirdBlur(thirdItem, secItem)")
+                        a.iconfont-node.icon-delete.node-btn(v-if="thirdItem.valid && !thirdItem.section_id" href="javascript:void(0)" @click="backup(secItem.children)")
+                        a.third-a(v-if="!thirdItem.valid" href="javascript:void(0)" @click="taggleNode(thirdItem)") {{thirdItem.section_name}}
                         a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!thirdItem.valid" href="javascript:void(0)" @click="addFourthLi(thirdItem)")
                         a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="deleteThird(thirdItem, thirdIndex, secItem.children)")
                         a.iconfont-node.icon-edit.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="editThird(thirdItem)")
                         //- fourthNode
                         ul.fourth-ul(v-if="thirdItem.children && thirdItem.children.length" :class="[thirdItem.hidden ? hiddenClass : showClass]")
                             li.fourth-li(v-for="(fourthItem, fourthIndex) in thirdItem.children")
-                                input.control-form(v-if="fourthItem.valid" v-model="fourthItem.unit_name" @blur="fourthBlur(fourthItem, thirdItem)")
-                                label.fourth-a.iconfont-node.icon-add-node(v-else) {{fourthItem.unit_name}}
+                                input.control-form(v-if="fourthItem.valid" v-model="fourthItem.unit_name" :placeholder="fourthItem.placeholder" @blur="fourthBlur(fourthItem, thirdItem)")
+                                a.iconfont-node.icon-delete.node-btn(v-if="fourthItem.valid && !thirdItem.unit_id" href="javascript:void(0)" @click="backup(thirdItem.children)")
+                                label.fourth-a(v-if="!fourthItem.valid") {{fourthItem.unit_name}}
                                 a.iconfont-node.icon-delete.node-btn(v-if="!fourthItem.valid" href="javascript:void(0)" @click="deleteFourth(fourthItem, fourthIndex, thirdItem.children)")
                                 a.iconfont-node.icon-edit.node-btn(v-if="!fourthItem.valid" href="javascript:void(0)" @click="editFourth(fourthItem)")
 </template>
@@ -39,15 +42,18 @@ export default {
         //   nodeDataList.children: [],
           secondaryItem: {
               chapter_name: '',
-              valid: true
+              valid: true,
+              placeholder: '请输入chapter内容'
           },
           thirdaryItem: {
               section_name: '',
-              valid: true
+              valid: true,
+              placeholder: '请输入section内容'
           },
           fourthItem: {
               unit_name: '',
-              valid: true
+              valid: true,
+              placeholder: '请输入unit内容'
           },
           validPointer: true,
           hiddenClass: 'hidden',
@@ -86,6 +92,10 @@ export default {
           this.nodeDataList.children.push(Object.assign({}, secondaryItem))
         //   this.nodeDataList.children[this.nodeDataList.children.length - 1].thirdaryList = []
           this.validPointer = false
+      },
+      backup (arrayArgu) {
+          arrayArgu.pop()
+          this.validPointer = true
       },
       secondaryBlur (item) {
           if (!item.chapter_name) {
@@ -128,11 +138,15 @@ export default {
       },
 
       editSecondary (item) {
+        if (!this.validPointer) {
+            return
+        }
         if (item.valid === undefined) {
             this.$set(item, 'valid', true)
         } else {
             item.valid = true
         }
+        this.validPointer = false
       },
       taggleChapter () {
 
@@ -162,11 +176,15 @@ export default {
       },
 
       editThird (item) {
+        if (!this.validPointer) {
+            return
+        }
         if (item.valid === undefined) {
             this.$set(item, 'valid', true)
         } else {
             item.valid = true
         }
+        this.validPointer = false
       },
 
       thirdBlur (item, chapter) {
@@ -267,25 +285,70 @@ export default {
       },
 
       editFourth (item) {
+        if (!this.validPointer) {
+            return
+        }
         if (item.valid === undefined) {
             this.$set(item, 'valid', true)
         } else {
             item.valid = true
         }
+        this.validPointer = false
       }
   }
 }
 </script>
 <style lang="scss" scoped>
+
+a, a:hover, a:active, a:focus {
+    color: #424242;
+    text-decoration: none;
+}
 .primary-ul {
     text-align: left;
     transition: 0.3s;
     & > .primary-li {
         cursor: pointer;
+        & > .primary-a {
+            font-size: 18px;
+            &:before {
+                font-family: "iconfont-admin" !important;
+                font-size:18px;
+                content: '\e637';
+                margin-right: 5px;
+            }
+        }
     }
 }
 .secondary-ul, .thirdary-ul, .fourth-ul{
     margin-left: 15px;
+}
+.secondary-a {
+    font-size: 16px;
+    &:before {
+        font-family: "iconfont-admin" !important;
+        font-size:16px;
+        content: '\e605';
+        margin-right: 5px;
+    }
+}
+.third-a {
+    font-size: 14px;
+    &:before {
+        font-family: "iconfont-admin" !important;
+        font-size:14px;
+        content: '\e6fc';
+        margin-right: 5px;
+    }
+}
+.fourth-a {
+    font-size: 12px;
+    &:before {
+        font-family: "iconfont-admin" !important;
+        font-size:12px;
+        content: '\e602';
+        margin-right: 5px;
+    }
 }
 .node-btn {
     margin-left: 10px;

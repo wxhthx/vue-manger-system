@@ -38,9 +38,14 @@
        right: 1rem;
        transition: transform 0.2s linear;
      } 
-     &.dirty:before {
-       transform: rotate(180deg);
-       margin-top: 5px;
+     &.dirty {
+       &:before{
+        transform: rotate(180deg);
+        margin-top: 5px;
+       }
+     }
+     &:hover:before {
+       transform: rotate(360deg);
      }
    }
 }

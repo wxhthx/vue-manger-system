@@ -1,11 +1,16 @@
 import Vue from 'vue'
+/*! 
+ * platform-admin
+ * @author:Alex Wen
+ * @email: xinghua.wen@istuaty.com
+ * @Data: 16/06/2017
+ */
 import axios from 'axios'
 import App from './App'
 import router from './config/router'
 import store from './config/store'
 import toast from './components/common/toast/js/toast'
 import modal from './components/common/modal/js/modal'
-// import toast from 'vue-awesome-toast'
 import VeeValidate, {Validator} from 'vee-validate'
 import {baseConfig} from './config/validate/validate.config'
 import messages from './config/validate/zh_CN'
