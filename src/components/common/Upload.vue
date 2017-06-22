@@ -6,13 +6,14 @@ import courseService from '@/service/course.service'
 import Dropzone from '@/assets/lib/dropzone'
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  props: ['acceptedFiles'],
+  props: ['acceptedFiles', 'maxFilesize'],
   data () {
     return {
         idProperty: '',
         now: '',
         fileName: '',
-        host: ''
+        host: '',
+        continuePower: true
     }
   },
   methods: {
@@ -99,11 +100,20 @@ export default {
         url: "/file/post",
         autoProcessQueue: false,
         acceptedFiles: vm.acceptedFiles,
+        maxFiles: vm.maxFilesize,
         init: function () {
             let myDropzone = this
             let files = myDropzone.files 
             this.on('addedfile', function () {
+                if (!vm.continuePower) {
+                    return
+                }
                 vm.set_upload_param(myDropzone, files[files.length - 1].name)
+            })
+            this.on('maxfilesexceeded', function (file) {
+                this.removeFile(file)
+                vm.continuePower = false
+                vm.hiddenLoading()
             })
             this.on('complete', function () {
                 vm.$toast({

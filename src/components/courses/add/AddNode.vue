@@ -299,11 +299,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-a, a:hover, a:active, a:focus {
-    color: #424242;
-    text-decoration: none;
-}
 .primary-ul {
     text-align: left;
     transition: 0.3s;

@@ -1,24 +1,26 @@
 import * as types from '../types'
 const state = {
-  adminUserId: '100',
-  adminToken: '691c5e1be0f1a556198d5e65766b65a7' 
+  adminUserId: '',
+  adminToken: '',
+  adminUserName: ''
 }
 
 const getters = {
-  adminUser: state => ({'admin_user_id': state.adminUserId, 'admin_token': state.adminToken})
+  adminUser: state => ({'admin_user_id': state.adminUserId, 'admin_token': state.adminToken, 'admin_user_name': state.adminUserName})
 }
 
 const actions = {
-    updateAdminUser ({commit, state}, id, token) {
-        commit(types.UPDATE_ADMIN_USER, {id, token})
+    updateAdminUser ({commit, state}, data) {
+        commit(types.UPDATE_ADMIN_USER, data)
     }
 }
 
 // mutations
 const mutations = {
-    [types.UPDATE_ADMIN_USER] (state, id, token) {
-        state.adminUserId = id
-        state.adminToken = token
+    [types.UPDATE_ADMIN_USER] (state, data) {
+        state.adminUserId = data.admin_id
+        state.adminToken = data.token
+        state.adminUserName = data.adminUserName
     }
 }
 

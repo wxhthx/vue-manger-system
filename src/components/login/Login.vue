@@ -3,36 +3,74 @@
     div.login-bg
     div.header
         div.btns-div
-            button.btn.btn-primary.btn-register(type="submit" @click="register") 注册
     div.login-wrapper
-        form.hotel-login
+        form.hotel-login(@submit.prevent="validateBeforeSubmit")
             div.form-group.row.mobile-row
                 label.col-4.col-form-label.align-left(for="name") 用户名
                 div.col-sm-8
-                    input.form-control.hotel-input(type="text" id="name" v-model="name" required maxlength="5")
+                    input.form-control.hotel-input(@focus="clearError" type="text" id="name" v-model="payload.admin_name" name="name"  v-validate="'required|max:10'" data-vv-as="名称" :class="{'error': errors.has('name')}")
+                    div.error(v-if="errors.has('name')") {{ errors.first('name') }}
             div.form-group.row.mobile-row
                 label.col-4.col-form-label.align-left(for="password") 密码
                 div.col-sm-8
-                    input.form-control.hotel-input(type="password" id="password" v-model="password")
+                    input.form-control.hotel-input(@focus="clearError" v-if="!showPassword" type="password" id="password" v-model="payload.password" name="password"  v-validate="'required|min:6'" data-vv-as="密码" :class="{'error': errors.has('password')}")
+                    input.form-control.hotel-input(@focus="clearError" v-else type="text" id="password" v-model="payload.password" name="password"  v-validate="'required|min:6'" data-vv-as="密码" :class="{'error': errors.has('password')}")
+                    a.eye.iconfont-admin(href="javascript:void(0)" v-if="!showPassword" @click="togglePasswordDisplay")
+                    a.brow.iconfont-admin(href="javascript:void(0)" v-if="showPassword" @click="togglePasswordDisplay")
+                    div.error(v-if="errors.has('password')") {{ errors.first('password') }}
             div.form-group.row.mobile-row
-                button.btn.btn-primary.col-12.btn-login-submit(type="submit" @click="submit") 登录
+                div.error(v-if="errorMsg") {{errorMsg}}
+                button.btn.btn-primary.col-12.btn-login-submit(type="submit") 登录
     div.login-footer
 </template>
 <script>
+import loginService from '@/service/login.service'
+import { mapActions } from 'vuex'
+
 export default {
   data () {
       return {
-          name: '',
-          password: ''
+          payload: {
+              admin_name: '',
+              password: ''
+          },
+          showPassword: false,
+          errorMsg: ''
       }
   },
   methods: {
-     submit: function () {
-         this.$router.push('/plat/admin')
-     },
-     register: function () {
-        //  this.$router.push('/register')
-     }
+      validateBeforeSubmit: function () {
+        this.$validator.validateAll().then(() => {
+            loginService.login(this.payload).then(
+                (res) => {
+                    if (res.error_code) {
+                        this.errorMsg = res.error_msg
+                        return
+                    }
+                    this.errorMsg = ''
+                    this.submit(res)
+                }
+            )           
+        }).catch(() => {
+            return
+        })
+      },
+      clearError () {
+          this.errorMsg = ''
+      },
+      submit: function (res) {
+        this.$store.commit('UPDATE_ADMIN_NAME', {admin_id: res.user_id, token: res.token, adminUserName: res.user_name})
+        localStorage.setItem('admin_id', res.user_id)
+        localStorage.setItem('token', res.token)
+        localStorage.setItem('adminUserName', res.user_name)
+        this.$router.push('/plat/users')
+      },
+      togglePasswordDisplay () {
+          this.showPassword = !this.showPassword
+      },
+      ...mapActions([
+          'updateAdminUser'
+      ])
   }
 }
 </script>
@@ -72,8 +110,8 @@ $btn-font-color: #757575;
 .login-bg {
     width: 100%;
     height: 500px;
-    // background: url(../../assets/images/hotel-login.jpg) no-repeat;
-    // background-size: cover;
+    background: url("/static/img/jpg/login.jpg") no-repeat;
+    background-size: cover;
     filter: blur(1px);
 }
 .login-wrapper {
@@ -122,5 +160,16 @@ $btn-font-color: #757575;
         width: 100%;
         @extend %btn-modeia-custom;
     }
+}
+.eye, .brow {
+    position: absolute;
+    top: 0.5rem;
+    right: 1.3rem;
+}
+.eye:before {
+    content: '\e700';
+}
+.brow:before {
+    content: '\e641';
 }
 </style>

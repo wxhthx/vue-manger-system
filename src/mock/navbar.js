@@ -1,17 +1,17 @@
 export const Navbar = [
-    {
-        id: 'privilege',
-        text: '权限管理',
-        selectedId: 'privilege',
-        primaryPath: '/plat/admin',
-        children: [
-            {
-                id: 'admin',
-                text: '管理员',
-                path: '/plat/admin'
-            }
-        ]
-    },
+    // {
+    //     id: 'privilege',
+    //     text: '权限管理',
+    //     selectedId: 'privilege',
+    //     primaryPath: '/plat/admin',
+    //     children: [
+    //         {
+    //             id: 'admin',
+    //             text: '管理员',
+    //             path: '/plat/admin'
+    //         }
+    //     ]
+    // },
     {
         id: 'users',
         text: '用户管理',

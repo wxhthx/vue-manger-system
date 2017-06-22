@@ -18,7 +18,10 @@ Vue.config.productionTip = false
 axios.interceptors.request.use(function (config) {
     store.commit('SHOW_LOADING')
     // 这里的config包含每次请求的内容
-    if (store.getters.adminUser) {
+    if (config.url !== '/college/users/webLogin') {
+        if (!store.getters.adminUser.admin_user_id) {
+          store.commit('UPDATE_ADMIN_NAME', {admin_id: localStorage.getItem('admin_id'), token: localStorage.getItem('token'), adminUserName: localStorage.getItem('adminUserName')})
+        }
         config.headers.admin_user_id = store.getters.adminUser.admin_user_id
         config.headers.admin_token = store.getters.adminUser.admin_token
     }
@@ -28,13 +31,9 @@ axios.interceptors.request.use(function (config) {
 })
 axios.interceptors.response.use(
   (res) => {
-    if (res.status === 401) {
-      router.push('/login')
-    } else {
-      return res.data 
-    }
-  }, (err) => {
-    console.log(err)
+    return res.data
+  }, () => {
+    router.push('/login')
   }
 )
 // Vue.prototype.$http = axios
