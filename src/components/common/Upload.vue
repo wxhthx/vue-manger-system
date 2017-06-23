@@ -6,14 +6,14 @@ import courseService from '@/service/course.service'
 import Dropzone from '@/assets/lib/dropzone'
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  props: ['acceptedFiles', 'maxFilesize'],
+  props: ['acceptedFiles'],
   data () {
     return {
         idProperty: '',
         now: '',
         fileName: '',
         host: '',
-        continuePower: true
+        uploadedFile: null
     }
   },
   methods: {
@@ -21,27 +21,26 @@ export default {
           'updateUploadData',
           'hiddenLoading'
       ]),
+      resetDropZone () {},
       set_upload_param (myDropzone, filename) {
         let self = this
-        self.now = Date.parse(new Date()) / 1000
-        // if (self.uploadData.expire < self.now + 3) {
-            courseService.getOssSign().then((res) => {
-                let uploadData = {}
-                uploadData.host = res['host']
-                self.host = res['host']
-                uploadData.policyBase64 = res['policy']
-                uploadData.accessid = res['accessid']
-                uploadData.signature = res['signature']
-                uploadData.expire = parseInt(res['expire'])
-                uploadData.callbackbody = res['callback'] 
-                uploadData.key = res['dir']
-                self.updateUploadData(uploadData)
-                self.upStart(myDropzone, filename)
-                // self.$emit('getImageUrl', uploadData.host + '/' + self.fileName)
-            })
-            // return
-        // }
-        // self.upStart(myDropzone, filename)
+        self.getOrdinarySign(myDropzone, filename)
+      },
+      getOrdinarySign (myDropzone, filename) {
+          let self = this
+          courseService.getOssSign().then((res) => {
+            let uploadData = {}
+            uploadData.host = res['host']
+            self.host = res['host']
+            uploadData.policyBase64 = res['policy']
+            uploadData.accessid = res['accessid']
+            uploadData.signature = res['signature']
+            uploadData.expire = parseInt(res['expire'])
+            uploadData.callbackbody = res['callback'] 
+            uploadData.key = res['dir']
+            this.updateUploadData(uploadData)
+            self.upStart(myDropzone, filename)
+        })
       },
       upStart (myDropzone, filename) {
         if (filename != '') {
@@ -100,22 +99,24 @@ export default {
         url: "/file/post",
         autoProcessQueue: false,
         acceptedFiles: vm.acceptedFiles,
-        maxFiles: vm.maxFilesize,
+        maxFiles: 1,
+        maxFilesize: 1024,
         init: function () {
             let myDropzone = this
             let files = myDropzone.files 
-            this.on('addedfile', function () {
-                if (!vm.continuePower) {
-                    return
+            myDropzone.on('addedfile', function () {
+                if (vm.uploadedFile) {
+                    myDropzone.removeFile(vm.uploadedFile)
                 }
                 vm.set_upload_param(myDropzone, files[files.length - 1].name)
             })
-            this.on('maxfilesexceeded', function (file) {
-                this.removeFile(file)
-                vm.continuePower = false
+            myDropzone.on('maxfilesexceeded', function (file) {
+                myDropzone.removeFile(file)
                 vm.hiddenLoading()
             })
-            this.on('complete', function () {
+            
+            myDropzone.on('complete', function (file) {
+                vm.uploadedFile = file
                 vm.$toast({
                     message: '封面图片上传成功',
                     theme: 'success'
@@ -123,6 +124,13 @@ export default {
                 vm.$emit('getImageUrl', vm.host + '/' + vm.fileName)
                 vm.hiddenLoading()
             })
+
+            // if (vm.uploader) {
+            //     vm.resetDropZone = () => {
+            //         myDropzone.removeAllFiles()
+            //     }
+            //     vm.$emit('resetDropZone', vm.resetDropZone)
+            // }
         }
     })
   },

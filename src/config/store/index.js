@@ -5,6 +5,7 @@ import * as getters from './getters'
 import admin from './modules/admin'
 import system from './modules/system'
 import upload from './modules/upload'
+import nodeActived from './modules/courseNodeActived'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -15,7 +16,8 @@ export default new Vuex.Store({
   modules: {
       system,
       admin,
-      upload
+      upload,
+      nodeActived
   },
   strict: debug,
   plugins: []

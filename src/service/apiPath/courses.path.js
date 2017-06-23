@@ -3,6 +3,10 @@ const COURSES_PATH = PATH + '/courses'
 const ALL_COURSES = COURSES_PATH + '/courses'
 const CATEGORIES = COURSES_PATH + '/courseCategories'
 const OSS_SIGN = PATH + '/video/resources/oss/sign'
+const VIDEO_OSS_SIGN = PATH + '/video/resources/videoUploadAuth'
+const UPDATE_VIDEO_OSS_SIGN = PATH + '/video/resources/videoUploadAuth/'
+const INSERT_VIDEO_RESOURCE = PATH + '/video/insertResource'
+const RELATE_VIDEO_COURSE = COURSES_PATH + '/parts/savePart'
 const SAVE_COURSE = COURSES_PATH + '/courses'
 const ALL_TUTORS = COURSES_PATH + '/tutors'
 const ADD_COURSE_CHAPTER = COURSES_PATH + '/Chapters'
@@ -25,5 +29,9 @@ export default {
     GET_COURSE_TUTORS_NAME,
     COURSE_TYPES_CLASS,
     GET_COURSE_TYPES,
-    COURSE_TYPES_CATEGORY
+    COURSE_TYPES_CATEGORY,
+    VIDEO_OSS_SIGN,
+    UPDATE_VIDEO_OSS_SIGN,
+    INSERT_VIDEO_RESOURCE,
+    RELATE_VIDEO_COURSE
 }

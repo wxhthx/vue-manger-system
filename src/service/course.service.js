@@ -35,6 +35,19 @@ class CourseService {
             url: Path.OSS_SIGN
         })
     }
+    getVideoOssSign (data) {
+        return axios({
+            method: 'post',
+            url: Path.VIDEO_OSS_SIGN,
+            data: data
+        })
+    }
+    getUpdateVideoOssSign (video_id) {
+        return axios({
+            method: 'post',
+            url: Path.UPDATE_VIDEO_OSS_SIGN + video_id
+        })
+    }
     saveCourse (payload) {
         return axios({
             method: 'post',
@@ -53,21 +66,11 @@ class CourseService {
         })
     }
 
-    saveEditedCourse (payload) {
+    saveEditedCourse (course_id, payload) {
         return axios({
             method: 'put',
-            url: Path.SAVE_COURSE,
-            data: {
-                "category_id": payload.category_id,
-                "course_name": payload.course_name,
-                "depict": payload.depict,
-                "icon_url": payload.icon_url,
-                "is_leaf_node": payload.is_leaf_node,
-                "learning_target_number": payload.learning_target_number,
-                "picture_url": payload.picture_url,
-                "recommended_level": payload.recommended_level,
-                "tutor_id": payload.tutor_id
-            }
+            url: Path.SAVE_COURSE + '/' + course_id,
+            data: payload
         })
     }
 
@@ -171,6 +174,20 @@ class CourseService {
         return axios({
             method: 'get',
             url: Path.SAVE_COURSE + '/' + course_id + '/content'
+        })
+    }
+    insertVideoResource (data) {
+        return axios({
+            method: 'post',
+            url: Path.INSERT_VIDEO_RESOURCE,
+            data: data
+        })
+    }
+    relateVideoCourse (data) {
+        return axios({
+            method: 'post',
+            url: Path.RELATE_VIDEO_COURSE,
+            data: data
         })
     }
 }

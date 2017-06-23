@@ -10,7 +10,7 @@
             li.secondary-li(v-for="(secItem, secIndex) in nodeDataList.children")
                 input.control-form(v-if="secItem.valid" v-model="secItem.chapter_name" :placeholder="secItem.placeholder" @blur="secondaryBlur(secItem)")
                 a.iconfont-node.icon-delete.node-btn(v-if="secItem.valid && !secItem.chapter_id" href="javascript:void(0)" @click="backup(nodeDataList.children)")
-                a.secondary-a(v-if="!secItem.valid" href="javascript:void(0)" @click="taggleNode(secItem)") {{secItem.chapter_name}}
+                a.secondary-a(v-if="!secItem.valid" href="javascript:void(0)" @click="taggleNode(secItem, 'chapter')" :class="[activedInfo.activedType === 'chapter' && activedInfo.activedId === secItem.chapter_id ? 'active' : '']") {{secItem.chapter_name}}
                 a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!secItem.valid" href="javascript:void(0)" @click="addThirdaryLi(secItem)")
                 a.iconfont-node.icon-delete.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="deleteSecondary(secItem, secIndex, nodeDataList.children)")
                 a.iconfont-node.icon-edit.node-btn(v-if="!secItem.valid" href="javascript:void(0)" @click="editSecondary(secItem)")
@@ -19,7 +19,7 @@
                     li.thirdary-li(v-for="(thirdItem, thirdIndex) in secItem.children")
                         input.control-form(v-if="thirdItem.valid" v-model="thirdItem.section_name" :placeholder="thirdItem.placeholder" @blur="thirdBlur(thirdItem, secItem)")
                         a.iconfont-node.icon-delete.node-btn(v-if="thirdItem.valid && !thirdItem.section_id" href="javascript:void(0)" @click="backup(secItem.children)")
-                        a.third-a(v-if="!thirdItem.valid" href="javascript:void(0)" @click="taggleNode(thirdItem)") {{thirdItem.section_name}}
+                        a.third-a(v-if="!thirdItem.valid" href="javascript:void(0)" @click="taggleNode(thirdItem, 'section')" :class="[activedInfo.activedType === 'section' && activedInfo.activedId === thirdItem.section_id ? 'active' : '']") {{thirdItem.section_name}}
                         a.iconfont-node.icon-add-node.node-icon-margin-left(v-if="!thirdItem.valid" href="javascript:void(0)" @click="addFourthLi(thirdItem)")
                         a.iconfont-node.icon-delete.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="deleteThird(thirdItem, thirdIndex, secItem.children)")
                         a.iconfont-node.icon-edit.node-btn(v-if="!thirdItem.valid" href="javascript:void(0)" @click="editThird(thirdItem)")
@@ -28,13 +28,14 @@
                             li.fourth-li(v-for="(fourthItem, fourthIndex) in thirdItem.children")
                                 input.control-form(v-if="fourthItem.valid" v-model="fourthItem.unit_name" :placeholder="fourthItem.placeholder" @blur="fourthBlur(fourthItem, thirdItem)")
                                 a.iconfont-node.icon-delete.node-btn(v-if="fourthItem.valid && !thirdItem.unit_id" href="javascript:void(0)" @click="backup(thirdItem.children)")
-                                label.fourth-a(v-if="!fourthItem.valid") {{fourthItem.unit_name}}
+                                label.fourth-a(v-if="!fourthItem.valid" @click="activedLabel(fourthItem)" :class="[activedInfo.activedType === 'unit' && activedInfo.activedId === fourthItem.unit_id ? 'active' : '']") {{fourthItem.unit_name}}
                                 a.iconfont-node.icon-delete.node-btn(v-if="!fourthItem.valid" href="javascript:void(0)" @click="deleteFourth(fourthItem, fourthIndex, thirdItem.children)")
                                 a.iconfont-node.icon-edit.node-btn(v-if="!fourthItem.valid" href="javascript:void(0)" @click="editFourth(fourthItem)")
 </template>
 <script>
 import courseService from '@/service/course.service'
 import loadingMixin from '@/config/mixins/loading.mixin'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   props: ['course_id', 'primaryName', 'nodeDataList'],
   data () {
@@ -71,16 +72,46 @@ export default {
               is_leaf_node: true,
               picture_url: 'none'
           }
-      }
+      },
+      ...mapGetters({
+          activedInfo: 'courseNodeActived'
+      })
   },
   methods: {
-      taggleNode (node) {
+      taggleNode (node, typeName) {
         if (node.hidden === undefined) {
             this.$set(node, 'hidden', true)
         } else {
             node.hidden = !node.hidden
         }
+        if (typeName === this.activedInfo.activedType && node[typeName + '_id'] === this.activedInfo.activedId) {
+            return
+        }
+        this.updateActived({
+            activedType: typeName,
+            activedId: node[typeName + '_id'],
+            activedChapterId: node.chapter_id ? node.chapter_id : 0,
+            activedSectionId: node.section_id ? node.section_id : 0,
+            activedUnitId: node.unit_id ? node.unit_id : 0,
+            activedName: node[typeName + '_name']
+        })
       },
+      activedLabel (node) {
+        if (this.activedInfo.activedType === 'unit' && node['unit_id'] === this.activedInfo.activedId) {
+            return
+        }
+        this.updateActived({
+            activedType: 'unit',
+            activedChapterId: 0,
+            activedId: node.unit_id,
+            activedSectionId: node.section_id,
+            activedUnitId: node.unit_id,
+            activedName: node.unit_name
+        })
+      },
+      ...mapActions({
+          updateActived: 'updateCourseNodeActived'
+      }),
       addSecondaryLi () {
           if (!this.validPointer) {
               return
@@ -299,6 +330,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+$actived_color: #F17C67;
 .primary-ul {
     text-align: left;
     transition: 0.3s;
@@ -356,5 +388,11 @@ export default {
 }
 .show {
     display: block;
+}
+a:active, a.active {
+    color: $actived_color;
+}
+label.active {
+    color: $actived_color;
 }
 </style>

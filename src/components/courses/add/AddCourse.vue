@@ -18,8 +18,8 @@
                 div.form-group.row.height_flud
                     label.col-sm-3.col-form-label(for="img") 封面
                     div.col-sm-9#imageContainer
-                        img.picrute.form-control(v-if="payload.picture_url" :src="payload.picture_url")
-                        common-upload(v-else v-on:getImageUrl="getImageUrl" :accepted-files="acceptedFiles" :max-filesize="maxFilesize")
+                        //- img.picrute.form-control(v-if="payload.picture_url" :src="payload.picture_url")
+                        common-upload(v-on:getImageUrl="getImageUrl" :accepted-files="acceptedFiles")
                         //- input.form-control.hidden-uploader(type="file" aria-describedby="fileHelp" @change="uploadImg")
             div.w-100
             div.col
@@ -49,6 +49,7 @@
             div.col-sm-4.border.add-node
                 add-node(:course_id="payload.course_id" :node-data-list="nodeData" :primary-name="payload.course_name")
             div.col-sm-8.border
+                add-resource(v-if="activedInfo.activedType" :course-id="payload.course_id")
         //- div.row.no-gutters
         //-     label.col-sm-3.col-form-label(for="img") 评分方式： 课程签到
         //-     div.col-sm-1
@@ -70,7 +71,8 @@ import Upload from '@/components/common/Upload'
 import AddNode from './AddNode'
 import Modal from '@/components/common/modal/Modal'
 import loadingMixin from '@/config/mixins/loading.mixin'
-
+import AddResource from './AddResource'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -129,7 +131,9 @@ export default {
         }
         // 修改用PUT保存数据,新增用POST保存数据
         if (this.payload.course_id) {
-            courseService.saveEditedCourse(this.payload).then(
+            let payload = Object.assign({}, this.payload)
+            delete payload.course_id
+            courseService.saveEditedCourse(this.payload.course_id, payload).then(
                 (res) => {
                     self.$toast(successToast)
                     self.$router.push('/plat/courses')
@@ -173,6 +177,11 @@ export default {
       getImageUrl (url) {
           this.payload.picture_url = url
       }
+  },
+  computed: {
+      ...mapGetters({
+          activedInfo: 'courseNodeActived'
+      })
   },
   created () {
     let self = this
@@ -234,6 +243,7 @@ export default {
   components: {
     'common-upload': Upload,
     'add-node': AddNode,
+    'add-resource': AddResource,
     'modal': Modal
   }
 }
