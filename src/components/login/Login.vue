@@ -110,7 +110,7 @@ $btn-font-color: #757575;
 .login-bg {
     width: 100%;
     height: 500px;
-    background: url("/static/img/jpg/login.jpg") no-repeat;
+    background: url("../../assets/img/login.jpg") no-repeat;
     background-size: cover;
     filter: blur(1px);
 }
