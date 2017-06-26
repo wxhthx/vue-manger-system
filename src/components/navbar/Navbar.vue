@@ -4,7 +4,7 @@
             li.nav-item.iconfont-navbar.arrow(v-for="(primaryItem, primaryIndex) in navbar" :class="[selectedIndex === primaryItem.selectedId ? selectedClass : notSelectedClass]" @click="activeNavbar(primaryItem)") 
                 span.nav-link(v-bind:class="[primaryItem.id]") {{primaryItem.text}}
                 //- router-link.nav-link(v-if="!primaryItem.children" v-bind:to="primaryItem.path") {{primaryItem.text}}
-                transition(name="navbar-second" enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeInUpBig")
+                transition(name="navbar-second" enter-active-class="navbar-enter-active" enter-class="navbar-enter" mode="out-in" leave-active-class="navbar-leave-active" leave-class="navbar-leave")
                     ul.second-navbar(v-if="primaryItem.children && selectedIndex === primaryItem.selectedId")
                         li(v-for="(secondItem, secondIndex) in primaryItem.children")
                             //- span(v-if="secondItem.children") {{secondItem.text}}
@@ -44,6 +44,22 @@ export default {
 $navbar-color: #424242;
 .nav {
     color: $navbar-color
+}
+.navbar-enter {
+    height: 0;
+    opacity: 0;
+    transform: translateX(10px);
+}
+.navbar-enter-active {
+    transition: all 0.5s ease;
+}
+.navbar-leave {
+    opacity: 0;
+}
+.navbar-leave-active {
+    transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transform: translateX(10px);
+    height: 0;   
 }
 
 a {

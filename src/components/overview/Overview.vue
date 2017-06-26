@@ -10,7 +10,7 @@
           div.loading
         div.switchBtn
           a.toggle-navbar(href="javascript:void(0)" @click="switchVisible")
-        transition(name="main-fade" mode="in-out")
+        transition(name="main-fade")
           router-view.main(name="main")
 </template>
 <script>
@@ -23,15 +23,11 @@ export default {
         visible: true,
         aaa: 'aaa',
         ccc: 'ccc',
-        colXl12: false,
-        colXl10: true,
-        animatedOut: false,
-        animatedIn: false
+        navbarAbsolute: false
     }
   },
   components: {
     'plat-header': Header
-    // 'plat-content': Content
   },
   computed: {
     ...mapGetters({
@@ -47,27 +43,9 @@ export default {
     },
     enter () {
       console.log('enter')
-      if (this.visible) {
-        this.colXl12 = false
-        this.colXl10 = true
-        this.animatedIn = true
-      } else {
-        this.colXl10 = false
-        this.colXl12 = true
-        this.animatedOut = true
-      }
     },
     leave () {
-      this.animated = false
-      if (this.visible) {
-        this.colXl12 = false
-        this.colXl10 = true
-        this.animatedIn = false
-      } else {
-        this.colXl10 = false
-        this.colXl12 = true
-        this.animatedOut = false
-      }
+      this.navbarAbsolute = true
     }
   }
 }
@@ -87,22 +65,22 @@ export default {
   min-height: 600px;
 }
 .main-fade-enter-active, .main-fade-leave-active {
-  transition: all 0.16s;
+  transition: all 0.3s;
 }
 .main-fade-leave-active {
   transform: translateY(-100%);
-}
-.main-fade-enter-active {
-  transform: translateY(-100%);
-  position: absolute;
-}
-.main-fade-leave {
-  transform: translateY(0);
-}
-.main-fade-enter, .main-fade-leave {
   opacity: 0;
 }
-.navbar-leave-active, .navbar-enter, .router-view-leave-active, .router-view-enter {
+.main-fade-enter-active {
+  transform: translateY(100%);
+}
+.main-fade-leave {
+  position: absolute;
+}
+.main-fade-enter {
+  opacity: 0;
+}
+.navbar-leave-active, .navbar-enter, {
   transform: translateX(-240px);
 }
 .navbar-enter {
@@ -112,7 +90,7 @@ export default {
 .router-view-active {
   position: absolute;
 }
-.navbar-leave-active, .navbar-enter-active, .router-view-leave-active, .router-view-enter-active {
+.navbar-leave-active, .navbar-enter-active {
   transition: all 0.3s;
 }
 .switchBtn {
