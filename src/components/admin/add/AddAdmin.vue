@@ -4,7 +4,7 @@
         div.form-group.row
             label.col-sm-2.col-form-label(for="input-name") 姓名:
             div.col-sm-4
-                input.form-control(type="text" id="input-name" v-model="admin.name" name="name"  v-validate="'required|max:10'" data-vv-as="姓名" :class="{'error': errors.has('name')}")
+                input.form-control(type="text" id="input-name" v-model="admin.name" name="name"  v-validate="'required|max:20'" data-vv-as="姓名" :class="{'error': errors.has('name')}")
                 div.error(v-show="errors.has('name')") {{ errors.first('name') }}
             label.col-sm-2.col-form-label(for="input-phone" )  手机:
             div.col-sm-4

@@ -9,7 +9,7 @@
         div.form-group.row
             label.col-sm-2.col-form-label(for="input-name") 姓名:
             div.col-sm-4
-                input.form-control(type="text" id="input-name" v-model="payload.user_name" name="name"  v-validate="'required|max:10'" data-vv-as="姓名" :class="{'error': errors.has('name')}")
+                input.form-control(type="text" id="input-name" v-model="payload.user_name" name="name"  v-validate="'required|max:20'" data-vv-as="姓名" :class="{'error': errors.has('name')}")
                 div.error(v-show="errors.has('name')") {{ errors.first('name') }}
             label.col-sm-2.col-form-label(for="input-phone" )  手机:
             div.col-sm-4
@@ -23,7 +23,7 @@
                     option(v-for="(orgaItem, orgaIndex) in payload.organizations" :value="orgaItem.id") {{orgaItem.name}}
             label.col-sm-2.col-form-label(for="input-number")  学号/工号:
             div.col-sm-4
-                input.form-control(id="input-number" type="text" v-model="payload.sno" name="number" v-validate="'required|min:6|max:20'" data-vv-as="学号/工号" :class="{'error': errors.has('number')}")
+                input.form-control(id="input-number" type="text" v-model="payload.sno" name="number" v-validate="'required|min:4|max:20'" data-vv-as="学号/工号" :class="{'error': errors.has('number')}")
                 div.error(v-if="errors.has('number')") {{errors.first('number')}}
         div.form-group.row
             //- label.col-sm-2.col-form-label(for="input-college") 学院:
@@ -32,7 +32,7 @@
             //-     div.error(v-if="errors.has('college')") {{errors.first('college')}}
             label.col-sm-2.col-form-label(for="input-major") 专业:
             div.col-sm-4
-                input.form-control(type="major" id="input-major" v-model="payload.major" name="major" v-validate="'required|min:6|max:20'" data-vv-as="专业" :class="{'error': errors.has('major')}")
+                input.form-control(type="major" id="input-major" v-model="payload.major" name="major" v-validate="'required|max:25'" data-vv-as="专业" :class="{'error': errors.has('major')}")
                 div.error(v-if="errors.has('major')") {{errors.first('major')}}
         div.form-group.row
             label.col-sm-2.col-form-label(for="input-email") 邮箱:
