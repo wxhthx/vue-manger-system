@@ -1,19 +1,18 @@
 <template lang="pug">
   div.width-flud
-    form
-      div.form-group.row
+    div.form-group.row
         label.col-sm-1.col-form-label(for="input-name") 名称:
         div.col-sm-3
-          input.form-control(type="text" id="input-name" v-model="payload.courseName")
+            input.form-control(type="text" id="input-name" v-model="payload.courseName")
         label.col-sm-1.col-form-label(for="input-tutor")  讲师:
         div.col-sm-3
-          select.form-control(type="text" v-model="payload.tutor_id")
-            option(v-for="(tutorItem, tutorIndex) in tutors" :value="tutorItem.tutor_id") {{tutorItem.tutor_name}}
+            select.form-control(type="text" v-model="payload.tutor_id")
+                option(v-for="(tutorItem, tutorIndex) in tutors" :value="tutorItem.tutor_id") {{tutorItem.tutor_name}}
         label.col-sm-1.col-form-label(for="input-categories")  类型:
         div.col-sm-3
-          select.form-control(id="input-categories" v-model="payload.categoryId")
-            option(v-for="(cateItem, cateIndex) in categories" :value="cateItem.category_id") {{cateItem.category_name}}
-      div.form-group.row.justify-content-end.padding-right
+            select.form-control(id="input-categories" v-model="payload.categoryId")
+                option(v-for="(cateItem, cateIndex) in categories" :value="cateItem.category_id") {{cateItem.category_name}}
+    div.form-group.row.justify-content-end.padding-right
         button.btn.btn-primary(@click="query") 搜索
     common-table(v-on:operator="operator"
       v-bind:tableData="tableData"
@@ -55,7 +54,12 @@ export default {
         if (!payload.curseName) {
             delete payload.curseName
         }
-        delete payload.tutor_id
+        if (!payload.tutor_id) {
+            delete payload.tutor_id
+        }
+        if (!payload.categoryId) {
+            delete payload.categoryId
+        }
         courseService.getSelectedCourses(payload).then(
             (res) => {
                 self.initData(res)
@@ -155,8 +159,12 @@ export default {
     var self = this
     courseService.getCategories().then(
         (res) => {
-            self.categories = res.data
-            self.payload.categoryId = self.categories[0].category_id
+            let resData = Object.assign([], res.data)
+            resData.unshift({category_id: 0, category_name: 'All'})
+            self.categories = resData
+            if (!self.payload.categoryId) {
+                 self.payload.categoryId = self.categories[0].category_id
+            }
             courseService.getCourses().then(
                 (res) => {
                     this.initData(res)
@@ -165,8 +173,12 @@ export default {
         })
     courseService.getAllTutors().then(
         (res) => {
-            this.tutors = res.data
-            this.payload.tutor_id = this.tutors[0].tutor_id
+            let resData = Object.assign([], res.data)
+            resData.unshift({tutor_id: 0, tutor_name: 'All'})
+            this.tutors = resData
+            if (!this.payload.tutor_id) {
+                this.payload.tutor_id = this.tutors[0].tutor_id
+            }    
         }
     )
     this.theadData = courseService.getTheadData()

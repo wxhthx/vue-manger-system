@@ -1,22 +1,21 @@
 <template lang="pug">
   div.width-flud
-    form
-      div.form-group.row
-        label.col-sm-1.col-form-label(for="input-name") 姓名:
-        div.col-sm-2
-          input.form-control(type="text" id="input-name" v-model="payload.user_name")
-        label.col-sm-1.col-form-label(for="input-phone")  手机:
-        div.col-sm-2
-          input.form-control(type="text" id="input-phone" v-model="payload.phone")
-        label.col-sm-1.col-form-label(for="input-school")  学校/单位:
-        div.col-sm-2
-          select.form-control(type="text" id="input-school" v-model="payload.organization_id")
-            option(v-for="(orgaItem, orgaIndex) in payload.organizations" :value="orgaItem.id") {{orgaItem.name}}
-        label.col-sm-1.col-form-label(for="input-number")  学号/工号:
-        div.col-sm-2
-          input.form-control(type="text" id="input-number" v-model="payload.sno")
-      div.form-group.row.justify-content-end.padding-right
-        button.btn.btn-primary(@click="query") 搜索
+    div.form-group.row
+      label.col-sm-1.col-form-label(for="input-name") 姓名:
+      div.col-sm-2
+        input.form-control(type="text" id="input-name" v-model="payload.user_name")
+      label.col-sm-1.col-form-label(for="input-phone")  手机:
+      div.col-sm-2
+        input.form-control(type="text" id="input-phone" v-model="payload.phone")
+      label.col-sm-1.col-form-label(for="input-school")  学校/单位:
+      div.col-sm-2
+        select.form-control(type="text" id="input-school" v-model="payload.organization_id")
+          option(v-for="(orgaItem, orgaIndex) in payload.organizations" :value="orgaItem.id") {{orgaItem.name}}
+      label.col-sm-1.col-form-label(for="input-number")  学号/工号:
+      div.col-sm-2
+        input.form-control(type="text" id="input-number" v-model="payload.sno")
+    div.form-group.row.justify-content-end.padding-right
+      button.btn.btn-primary(@click="query") 搜索
     div.width-flud
       admin-details(v-on:operator="operator"
       v-bind:tableData="detailsTable"
@@ -126,9 +125,12 @@ export default {
       )
       this.orgaPromise = OrganizationService.getAll().then(
         (res) => {
-          this.payload.organizations = res.organizations
-          // this.payload.organization_id = this.payload.organizations[0].id
-          console.log('orgaPromise resolved')
+          let resData = Object.assign([], res.organizations)
+          resData.unshift({id: 0, name: 'All'})
+          this.payload.organizations = resData
+          if (!this.payload.organization_id) {
+            this.payload.organization_id = this.payload.organizations[0].id
+          }
         }
       )
       Promise.all([this.getAllPromise, this.orgaPromise]).then(

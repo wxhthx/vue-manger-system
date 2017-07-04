@@ -121,7 +121,8 @@ $btn-font-color: #757575;
    height: 400px;
    background: white;
    .hotel-login {
-       margin: 0 30px;
+       width: 100%;
+       padding: 0 30px;
        @extend %login-vertical-middle;
        .align-left {
            text-align: left;

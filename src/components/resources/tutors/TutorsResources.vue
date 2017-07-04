@@ -1,12 +1,11 @@
 <template lang="pug">
   div.width-flud
-    form
-      div.form-group.row
-        label.col-sm-1.col-form-label(for="input-name") 姓名:
-        div.col-sm-3
-          input.form-control(type="text" id="input-name" v-model="payload.tutor_name")
-      div.form-group.row.justify-content-end.padding-right
-        button.btn.btn-primary(@click="query") 搜索
+    div.form-group.row
+      label.col-sm-1.col-form-label(for="input-name") 姓名:
+      div.col-sm-3
+        input.form-control(type="text" id="input-name" v-model="payload.tutor_name")
+    div.form-group.row.justify-content-end.padding-right
+      button.btn.btn-primary(@click="query") 搜索
     div.width-flud
       admin-details(v-on:operator="operator"
       v-bind:tableData="detailsTable"

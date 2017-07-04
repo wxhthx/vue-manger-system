@@ -44,10 +44,10 @@
             //-     input.form-control(type="password" id="input-password" v-model="payload.password" name="password" v-validate="'required|min:6|max:20'" data-vv-as="密码" :class="{'error': errors.has('password')}")
             //-     div.error(v-if="errors.has('password')") {{errors.first('password')}}
         div.btn-group(role="group")
-            button.btn.btn-primary(type="checkCourses") 查看课程
-            button.btn.btn-primary(type="checkCollects") 查看收藏
+            button.btn.btn-primary(@click.prevent="checkCourses") 查看课程
+            button.btn.btn-primary(@click.prevent="checkCollects") 查看收藏
             button.btn.btn-primary(type="submit") 保存
-            button.btn.btn-primary(@click="quit") 取消
+            button.btn.btn-primary(@click.prevent="quit") 取消
 </template>
 <script>
 import UserService from '@/service/users.service'

@@ -2,19 +2,18 @@
   div.width-flud
     div.loading-div(v-if="loading")
       div.loading
-    form
-      div.form-group.row
-        label.col-sm-1.col-form-label(for="input-name") 姓名:
-        div.col-sm-3
-          input.form-control(type="text" id="input-name")
-        label.col-sm-1.col-form-label(for="input-phone")  手机:
-        div.col-sm-3
-          select.form-control(id="input-phone")
-        label.col-sm-1.col-form-label(for="input-status")  状态:
-        div.col-sm-3
-          input.form-control(type="text" id="input-status")
-      div.form-group.row.justify-content-end.padding-right
-        button.btn.btn-primary(@click="query") 搜索
+    div.form-group.row
+      label.col-sm-1.col-form-label(for="input-name") 姓名:
+      div.col-sm-3
+        input.form-control(type="text" id="input-name")
+      label.col-sm-1.col-form-label(for="input-phone")  手机:
+      div.col-sm-3
+        select.form-control(id="input-phone")
+      label.col-sm-1.col-form-label(for="input-status")  状态:
+      div.col-sm-3
+        input.form-control(type="text" id="input-status")
+    div.form-group.row.justify-content-end.padding-right
+      button.btn.btn-primary(@click="query") 搜索
     div.width-flud
       admin-details(v-on:operator="operator"
       v-bind:tableData="detailsTable"
