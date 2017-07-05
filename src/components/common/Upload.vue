@@ -30,7 +30,13 @@ export default {
           let self = this
           courseService.getOssSign().then((res) => {
             let uploadData = {}
-            uploadData.host = res['host']
+            // uploadData.host = res['host']
+            if (process.env.NODE_ENV !== 'development') {
+                let hostArr = res['host'].split(':')
+                hostArr[0] += 's'
+                uploadData.host = hostArr[0] + ':' + hostArr[1]
+                self.host = uploadData.host
+            }
             self.host = res['host']
             uploadData.policyBase64 = res['policy']
             uploadData.accessid = res['accessid']

@@ -68,6 +68,10 @@ module.exports = {
           test: /\.s[a|c]ss$/,
           loader: 'style!css!sass',
           include: [resolve('src'), resolve('test')]
+      },
+      {
+        test: /\.pug$/,
+        loader: 'pug-loader'
       }
     ]
   }

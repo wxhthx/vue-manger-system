@@ -11,7 +11,7 @@ div.width_flud
                 td(v-for="(typeItem, typeIndex) in colType")
                     span(v-if="typeIndex !== colType.length - 1 || !ifoperate") {{rowItem[typeItem]}}
                     div.btn-group(v-if="ifoperate && typeIndex === colType.length - 1" role="group")
-                        button.btn.btn-secondary(v-for="(btnItem, btnIndex) in operateList" :disabled="btnItem.disabled" @click="operator(rowItem, btnItem)") {{btnItem.text}}
+                        button.btn.btn-secondary(v-for="(btnItem, btnIndex) in operateList" :disabled="btnItem.disabled" @click.prevent="operator(rowItem, btnItem)") {{btnItem.text}}
     nav(aria-label="Page navigation example")
         ul.pagination.justify-content-end(v-if="pagination !== -1")
             li.page-item.first-page(:class="{'disabled': curPageIndex === 0}")
@@ -73,6 +73,13 @@ export default {
   created () {
     this.operateList = !this.operateList ? [] : this.operateList
     this.pagination = !this.pagination ? this.tableData.length : parseInt(this.pagination)
+  },
+  watch: {
+      pageSize: function () {
+          if (this.curPageIndex + 1 > this.pageSize) {
+            this.curPageIndex = this.pageSize - 1
+          }
+      }
   },
   methods: {
     operator (rowItem, operateItem) {
