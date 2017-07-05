@@ -19,7 +19,7 @@
                     label.col-sm-3.col-form-label(for="img") 封面
                     div.col-sm-9#imageContainer
                         //- img.picrute.form-control(v-if="payload.picture_url" :src="payload.picture_url")
-                        common-upload(v-on:getImageUrl="getImageUrl" :accepted-files="acceptedFiles")
+                        common-upload(v-on:getImageUrl="getImageUrl" :init-image-url="initImageUrl" :accepted-files="acceptedFiles")
                         //- input.form-control.hidden-uploader(type="file" aria-describedby="fileHelp" @change="uploadImg")
             div.w-100
             div.col
@@ -67,7 +67,7 @@
 </template>
 <script>
 import courseService from '@/service/course.service'
-import Upload from '@/components/common/Upload'
+import Upload from '@/components/common/Uploadimage'
 import AddNode from './AddNode'
 import Modal from '@/components/common/modal/Modal'
 import loadingMixin from '@/config/mixins/loading.mixin'
@@ -181,7 +181,10 @@ export default {
   computed: {
       ...mapGetters({
           activedInfo: 'courseNodeActived'
-      })
+      }),
+      initImageUrl () {
+          return this.payload.picture_url
+      }
   },
   created () {
     let self = this

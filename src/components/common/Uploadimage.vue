@@ -6,14 +6,16 @@ import courseService from '@/service/course.service'
 import Dropzone from '@/assets/lib/dropzone'
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  props: ['acceptedFiles'],
+  props: ['acceptedFiles', 'initImageUrl'],
   data () {
     return {
         idProperty: '',
         now: '',
         fileName: '',
         host: '',
-        uploadedFile: null
+        uploadedFile: null,
+        downloadImage: true,
+        preloader: {}
     }
   },
   methods: {
@@ -36,8 +38,10 @@ export default {
                 hostArr[0] += 's'
                 uploadData.host = hostArr[0] + ':' + hostArr[1]
                 self.host = uploadData.host
+            } else {
+                uploadData.host = res['host']
             }
-            self.host = res['host']
+            this.host = uploadData.host
             uploadData.policyBase64 = res['policy']
             uploadData.accessid = res['accessid']
             uploadData.signature = res['signature']
@@ -94,6 +98,19 @@ export default {
         console.log('callbackbody')
     }
   },
+  watch: {
+      initImageUrl: function () {
+          if (this.initImageUrl && this.downloadImage) {
+            let iamgeUrlArr = this.initImageUrl.split('/')
+            let mockFile = { name: iamgeUrlArr[iamgeUrlArr.length - 1], size: 12345, download: true }
+            this.preloader.emit("addedfile", mockFile)
+            this.preloader.emit('thumbnail', mockFile, this.initImageUrl)
+            this.preloader.files.push(mockFile)
+            this.preloader.emit('complete', mockFile)
+            this.downloadImage = false
+          }
+      }
+  },
   created () {
     this.idProperty = this.random_string(6)
   },
@@ -101,20 +118,23 @@ export default {
     var vm = this
     // vm.idProperty = vm.random_string()
     Dropzone.autoDiscover = false
-    let preloader = new Dropzone("#" + vm.generatedId, {
+    vm.preloader = new Dropzone("#" + vm.generatedId, {
         url: "/file/post",
         autoProcessQueue: false,
-        acceptedFiles: vm.acceptedFiles,
+        acceptedFiles: vm.acceptedFiles || 'image/*',
         maxFiles: 1,
         maxFilesize: 1024,
+        dictDefaultMessage: '拖拽文件到此上传',
         init: function () {
             let myDropzone = this
             let files = myDropzone.files 
             myDropzone.on('addedfile', function () {
-                if (vm.uploadedFile) {
-                    myDropzone.removeFile(vm.uploadedFile)
+                if (myDropzone.files.length) {
+                    myDropzone.removeFile(myDropzone.files[0])
                 }
-                vm.set_upload_param(myDropzone, files[files.length - 1].name)
+                if (!vm.downloadImage) {
+                    vm.set_upload_param(myDropzone, files[files.length - 1].name)
+                }
             })
             myDropzone.on('maxfilesexceeded', function (file) {
                 myDropzone.removeFile(file)
@@ -122,6 +142,9 @@ export default {
             })
             
             myDropzone.on('complete', function (file) {
+                if (file.download) {
+                    return
+                }
                 vm.uploadedFile = file
                 vm.$toast({
                     message: '封面图片上传成功',
@@ -130,13 +153,6 @@ export default {
                 vm.$emit('getImageUrl', vm.host + '/' + vm.fileName)
                 vm.hiddenLoading()
             })
-
-            // if (vm.uploader) {
-            //     vm.resetDropZone = () => {
-            //         myDropzone.removeAllFiles()
-            //     }
-            //     vm.$emit('resetDropZone', vm.resetDropZone)
-            // }
         }
     })
   },

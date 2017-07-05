@@ -17,8 +17,8 @@
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="name") Logo
                     div.col-sm-9#imageContainer
-                        img.picrute.form-control(v-if="payload.photo_url" :src="payload.photo_url")
-                        upload(v-else v-on:getImageUrl="getImageUrl")
+                        //- img.picrute.form-control(v-if="payload.photo_url" :src="payload.photo_url")
+                        upload(v-on:getImageUrl="getImageUrl" :initImageUrl="payload.photo_url")
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="name") 简介
                     div.col-sm-9
@@ -29,7 +29,7 @@
             button.btn.btn-primary(@click.prevent="exit") 取消
 </template>
 <script>
-import Upload from '@/components/common/Upload'
+import Upload from '@/components/common/Uploadimage'
 import tutorService from '@/service/tutor.service'
 import loadingMixin from '@/config/mixins/loading.mixin'
 export default {

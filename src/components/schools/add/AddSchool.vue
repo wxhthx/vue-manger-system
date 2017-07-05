@@ -20,7 +20,7 @@
             button.btn.btn-primary(@click.prevent="exit") 取消
 </template>
 <script>
-import Upload from '@/components/common/Upload'
+import Upload from '@/components/common/Uploadimage'
 import organizationService from '@/service/organization.service'
 import loadingMixin from '@/config/mixins/loading.mixin'
 export default {
