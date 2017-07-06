@@ -19,7 +19,7 @@
             label.col-sm-2.col-form-label(for="input-school") 学校/单位:
             div.col-sm-4
                 //- input.form-control(id="input-school" type="text" v-model="payload.organization" name="school" v-validate="'required|min:6|max:20'" data-vv-as="学校/单位" :class="{'error': errors.has('school')}")
-                select.form-control(type="text" id="input-school" v-model="payload.organization_id")
+                select.form-control(v-model="payload.organization_id")
                     option(v-for="(orgaItem, orgaIndex) in payload.organizations" :value="orgaItem.id") {{orgaItem.name}}
             label.col-sm-2.col-form-label(for="input-number")  学号/工号:
             div.col-sm-4
@@ -113,45 +113,52 @@ export default {
       uploadImg () {
           console.log('upload img')
       },
-      orgaPromise () {},
+    //   orgaPromise () {},
       getOrganizations () {
         return OrganizationService.getAll().then(
             (res) => {
-            this.payload.organizations = res.organizations
-            this.payload.organization_id = this.payload.organizations[0].id
+                this.payload.organizations = res.organizations
+                // if (this.$route.params.id === 'default') {
+                //     this.payload.organization_id = this.payload.organizations[0].id
+                // }
             }
         )
       }
   },
   created () {
       let self = this
-      self.orgaPromise = self.getOrganizations()
-      if (self.$route.params.id !== 'default') {
-        self.payload.user_id = self.$route.params.id
-        // 查询用户信息
-        let initUserPromise = UserService.getSingleUser(self.payload.user_id).then(
-            (res) => {
-                self.payload.user_name = res.user_name
-                self.payload.phone = res.phone
-                self.payload.organization_id = res.organization_id
-                self.payload.sno = res.sno
-                self.payload.major = res.major
-                self.payload.email = res.email
-                self.payload.password = res.password
-            }
-        )
-        Promise.all([self.orgaPromise, initUserPromise]).then(
+      self.getOrganizations().then(
           (res) => {
-            self.hiddenLoading()
-          }
-        )
-      } else {
-        Promise.all([self.orgaPromise]).then(
-            (res) => {
-                self.hiddenLoading()
+            if (self.$route.params.id !== 'default') {
+                self.payload.user_id = self.$route.params.id
+                // 查询用户信息
+                let initUserPromise = UserService.getSingleUser(self.payload.user_id).then(
+                    (res) => {
+                        self.hiddenLoading()
+                        self.payload.user_name = res.user_name
+                        self.payload.phone = res.phone
+                        self.payload.organization_id = res.organization_id.toString()
+                        console.log('self.payload.organization_id:' + self.payload.organization_id)
+                        self.payload.sno = res.sno
+                        self.payload.major = res.major
+                        self.payload.email = res.email
+                        self.payload.password = res.password
+                    }
+                )
+                // Promise.all([self.orgaPromise, initUserPromise]).then(
+                //   (res) => {
+                //     self.hiddenLoading()
+                //   }
+                // )
+            } else {
+                Promise.all([self.getOrganizations]).then(
+                    (res) => {
+                        self.hiddenLoading()
+                    }
+                )
             }
-        )
-      }
+          }
+      )
   }
 }
 </script>

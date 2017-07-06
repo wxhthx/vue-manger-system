@@ -88,6 +88,10 @@ export default {
             learning_target_number: 1,
             recommended_level: 0
         },
+        temp: {
+           category_id: '',
+           tutor_id: ''
+        },
         categories: [],
         tutors: [],
         nodeData: [],
@@ -199,10 +203,9 @@ export default {
         couserPromise = courseService.getSimpleCourse(self.payload.course_id).then(
             (res) => {
                 self.payload.course_name = res.course_name
-                self.payload.category_id = res.category_id
+                self.temp.category_id = res.category_id
                 self.payload.depict = res.depict
-                self.payload.tutor_id = res.tutor_id
-                console.log('self.payload.tutor_id:' + self.payload.tutor_id)
+                self.temp.tutor_id = res.tutor_id
                 self.payload.picture_url = res.picture_url
                 self.payload.is_leaf_node = res.is_leaf_node
                 self.payload.learning_target_number = res.learning_target_number
@@ -219,16 +222,12 @@ export default {
     let categoryPromise = courseService.getCategories().then(
         (res) => {
             self.categories = res.data
-            self.payload.category_id = self.categories[0].category_id
             self.hiddenLoading()
         }
     )
     let tutorPromise = courseService.getAllTutors().then(
         (res) => {
             self.tutors = res.data
-            if (self.$route.params.id === 'default') {
-                self.payload.tutor_id = self.tutors[0].tutor_id
-            }
             self.hiddenLoading()
         }
     )
@@ -238,13 +237,19 @@ export default {
     }
     if (couserPromise) {
         Promise.all([couserPromise, categoryPromise, tutorPromise]).then(
-
-            self.$toast(toast)
+            (res) => {
+                self.payload.tutor_id = self.tutors[0].tutor_id
+                self.payload.category_id = self.categories[0].category_id
+                self.$toast(toast)
+            }
         )
     } else {
         Promise.all([categoryPromise, tutorPromise]).then(
-
-            self.$toast(toast)
+            (res) => {
+                self.payload.tutor_id = self.temp.tutor_id
+                self.payload.category_id = self.temp.category_id
+                self.$toast(toast)
+            }
         )
     }
   },
