@@ -238,16 +238,16 @@ export default {
     if (couserPromise) {
         Promise.all([couserPromise, categoryPromise, tutorPromise]).then(
             (res) => {
-                self.payload.tutor_id = self.tutors[0].tutor_id
-                self.payload.category_id = self.categories[0].category_id
+                self.payload.tutor_id = self.temp.tutor_id
+                self.payload.category_id = self.temp.category_id
                 self.$toast(toast)
             }
         )
     } else {
         Promise.all([categoryPromise, tutorPromise]).then(
             (res) => {
-                self.payload.tutor_id = self.temp.tutor_id
-                self.payload.category_id = self.temp.category_id
+                self.payload.tutor_id = self.tutors[0].tutor_id
+                self.payload.category_id = self.categories[0].category_id
                 self.$toast(toast)
             }
         )
