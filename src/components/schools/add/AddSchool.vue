@@ -12,7 +12,7 @@
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="name") Logo
                     div.col-sm-9
-                        upload
+                        upload(v-on:getImageUrl="getImageUrl" :init-image-url="payload.picture_url" :exist-init="existInit")
         div.row
             div.curses-detail-caontainer(v-if="payload.organization_id")
         div.btn-group.row.margin-top
@@ -28,7 +28,8 @@ export default {
       return {
         payload: {
             name: '',
-            organization_id: ''
+            organization_id: '',
+            picture_url: ''
         }
       }
   },
@@ -47,7 +48,7 @@ export default {
       save () {
         let self = this
         if (!self.payload.organization_id) {
-            let data = {name: self.payload.name}
+            let data = {name: self.payload.name, picture_url: self.payload.picture_url}
             organizationService.saveOrganizaiotn(data).then(
                 (res) => {
                     self.$router.push('/plat/schools')
@@ -55,7 +56,8 @@ export default {
             )
         } else {
             let data = {
-                name: self.payload.name
+                name: self.payload.name,
+                picture_url: self.payload.picture_url
             }
             organizationService.updateOrganizaiotn(self.payload.organization_id, data).then(
                 (res) => {
@@ -67,6 +69,15 @@ export default {
 
       exit () {
           this.$router.push('/plat/schools')
+      },
+
+      getImageUrl (url) {
+        this.payload.picture_url = url
+      }
+  },
+  computed: {
+      existInit () {
+          return this.$route.params.id !== 'default'
       }
   },
   created () {
@@ -81,6 +92,7 @@ export default {
             (res) => {
                 self.hiddenLoading()
                 self.payload.name = res.name
+                self.payload.picture_url = res.picture_url
             }
         )
       }

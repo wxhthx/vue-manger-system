@@ -5,9 +5,9 @@
         div.row
             div.col   
                 div.form-group.row
-                    label.col-sm-3.col-form-label(for="name") 姓名
+                    label.col-sm-3.col-form-label(for="name") 课程名称
                     div.col-sm-9
-                        input.form-control(type="text" v-model="payload.course_name"  name="name"  v-validate="'required|max:10'" data-vv-as="姓名" :class="{'error': errors.has('name')}")
+                        input.form-control(type="text" v-model="payload.course_name"  name="name"  v-validate="'required|max:10'" data-vv-as="课程名称" :class="{'error': errors.has('name')}")
                         div.error(v-if="errors.has('name')") {{ errors.first('name') }}
                 div.form-group.row
                     label.col-sm-3.col-form-label(for="category") 类型
@@ -19,7 +19,7 @@
                     label.col-sm-3.col-form-label(for="img") 封面
                     div.col-sm-9#imageContainer
                         //- img.picrute.form-control(v-if="payload.picture_url" :src="payload.picture_url")
-                        common-upload(v-on:getImageUrl="getImageUrl" :init-image-url="initImageUrl" :accepted-files="acceptedFiles")
+                        common-upload(v-on:getImageUrl="getImageUrl" :init-image-url="initImageUrl" :accepted-files="acceptedFiles" :exist-init="existInit")
                         //- input.form-control.hidden-uploader(type="file" aria-describedby="fileHelp" @change="uploadImg")
             div.w-100
             div.col
@@ -81,10 +81,10 @@ export default {
             course_name: '',
             category_id: '',
             depict: '',
-            tutor_id: '1',
+            tutor_id: 0,
             picture_url: '',
             icon_url: '/icon/a.icon',
-            is_leaf_node: true,
+            is_leaf_node: false,
             learning_target_number: 1,
             recommended_level: 0
         },
@@ -184,6 +184,10 @@ export default {
       }),
       initImageUrl () {
           return this.payload.picture_url
+      },
+      existInit () {
+          console.log(this.$route.params.id + '_is_' + this.$route.params.id !== 'default')
+          return this.$route.params.id !== 'default'
       }
   },
   created () {
@@ -198,6 +202,7 @@ export default {
                 self.payload.category_id = res.category_id
                 self.payload.depict = res.depict
                 self.payload.tutor_id = res.tutor_id
+                console.log('self.payload.tutor_id:' + self.payload.tutor_id)
                 self.payload.picture_url = res.picture_url
                 self.payload.is_leaf_node = res.is_leaf_node
                 self.payload.learning_target_number = res.learning_target_number
@@ -221,7 +226,9 @@ export default {
     let tutorPromise = courseService.getAllTutors().then(
         (res) => {
             self.tutors = res.data
-            self.payload.tutor_id = self.tutors[0].tutor_id
+            if (self.$route.params.id === 'default') {
+                self.payload.tutor_id = self.tutors[0].tutor_id
+            }
             self.hiddenLoading()
         }
     )

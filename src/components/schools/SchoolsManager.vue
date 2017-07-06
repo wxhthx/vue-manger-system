@@ -1,7 +1,7 @@
 <template lang="pug">
   div.width-flud
     div.form-group.row
-      label.col-sm-1.col-form-label(for="input-name") 姓名:
+      label.col-sm-1.col-form-label(for="input-name") 名称:
       div.col-sm-3
         input.form-control(type="text" id="input-name" v-model="payload.name")
     div.form-group.row.justify-content-end.padding-right

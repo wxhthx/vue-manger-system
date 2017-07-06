@@ -51,11 +51,14 @@ export default {
       query () {
         let self = this
         let payload = Object.assign({}, this.payload)
-        if (!payload.curseName) {
-            delete payload.curseName
+        if (!payload.courseName) {
+            delete payload.courseName
         }
         if (!payload.tutor_id) {
             delete payload.tutor_id
+        } else {
+            delete payload.tutor_id
+            payload.tutorId = this.payload.tutor_id
         }
         if (!payload.categoryId) {
             delete payload.categoryId

@@ -6,7 +6,7 @@ import courseService from '@/service/course.service'
 import Dropzone from '@/assets/lib/dropzone'
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  props: ['acceptedFiles', 'initImageUrl'],
+  props: ['acceptedFiles', 'initImageUrl', 'existInit'],
   data () {
     return {
         idProperty: '',
@@ -100,7 +100,7 @@ export default {
   },
   watch: {
       initImageUrl: function () {
-          if (this.initImageUrl && this.downloadImage) {
+          if (this.initImageUrl && this.downloadImage && this.existInit) {
             let iamgeUrlArr = this.initImageUrl.split('/')
             let mockFile = { name: iamgeUrlArr[iamgeUrlArr.length - 1], size: 12345, download: true }
             this.preloader.emit("addedfile", mockFile)
@@ -129,10 +129,10 @@ export default {
             let myDropzone = this
             let files = myDropzone.files 
             myDropzone.on('addedfile', function () {
-                if (myDropzone.files.length) {
+                if (myDropzone.files.length > 1) {
                     myDropzone.removeFile(myDropzone.files[0])
                 }
-                if (!vm.downloadImage) {
+                if (!vm.initImageUrl || !vm.downloadImage) {
                     vm.set_upload_param(myDropzone, files[files.length - 1].name)
                 }
             })
@@ -145,6 +145,7 @@ export default {
                 if (file.download) {
                     return
                 }
+                vm.downloadImage = false
                 vm.uploadedFile = file
                 vm.$toast({
                     message: '封面图片上传成功',
