@@ -156,14 +156,37 @@ export default {
             )
           }      
       },
+      modalComfirm (item, index, array, func, message) {
+        this.$modal({
+            header: '提示',
+            message,
+            footer: [
+                {type: 'ok', text: '确认', method: func, argu: [item, index, array]},
+                {type: 'cancel', text: '取消'}
+            ]
+        })
+      },
 
       deleteSecondary (item, index, array) {
+          this.modalComfirm(item, index, array, this.realDeleteSecondary, '是否要删除目前课程当前章内容?')
+      },
+
+      realDeleteSecondary (item) {
           let self = this
-          courseService.deleteChapters(item.chapter_id).then(
+          self.$modal({
+              visible: false
+          })
+          courseService.deleteChapters(item[0].chapter_id).then(
               (res) => {
                   self.hiddenLoading()
-                  array.splice(index, 1)
-                  console.log('chapter deleted')
+                  item[2].splice(item[1], 1)
+                  this.$toast('删除目前课程当前章内容成功')
+              }, () => {
+                  self.hiddenLoading()
+                  this.$toast({
+                      message: '删除目前课程当前章内容失败',
+                      theme: 'error'
+                  })
               }
           )
       },
@@ -196,12 +219,25 @@ export default {
       },
 
       deleteThird (item, index, array) {
+        this.modalComfirm(item, index, array, this.realDeleteThird, '是否要删除目前课程当前节内容?')
+      },
+
+      realDeleteThird (item) {
         let self = this
-        courseService.deleteSections(item.section_id).then(
+        self.$modal({
+            visible: false
+        })
+        courseService.deleteSections(item[0].section_id).then(
             (res) => {
                 self.hiddenLoading()
-                array.splice(index, 1)
-                console.log('section deleted')
+                item[2].splice(item[1], 1)
+                self.$toast('删除目前课程当前节内容成功')
+            }, () => {
+                self.hiddenLoading()
+                this.$toast({
+                    message: '删除目前课程当前节内容失败',
+                    theme: 'error'
+                })
             }
         )
       },
@@ -305,12 +341,25 @@ export default {
       },
 
       deleteFourth (item, index, array) {
+        this.modalComfirm(item, index, array, this.realDeleteFourth, '是否要删除目前课程当前单元内容?')
+      },
+
+      realDeleteFourth (item) {
         let self = this
-        courseService.deleteUnits(item.unit_id).then(
+        self.$modal({
+            visible: false
+        })
+        courseService.deleteUnits(item[0].unit_id).then(
             (res) => {
                 self.hiddenLoading()
-                array.splice(index, 1)
-                console.log('section deleted')
+                item[2].splice(item[1], 1)
+                self.$toast('删除目前课程当前单元内容成功')
+            }, () => {
+                self.hiddenLoading()
+                self.$toast({
+                    message: '删除目前课程当前单元内容失败',
+                    theme: 'error'
+                })
             }
         )
       },

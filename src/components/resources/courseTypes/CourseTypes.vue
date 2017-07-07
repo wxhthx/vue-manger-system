@@ -102,13 +102,35 @@ export default {
       },
 
       deleteSecondary (item, index, array) {
-          let self = this
-          courseTypeService.deleteClass(item.class_id).then(
-              (res) => {
-                  self.hiddenLoading()
-                  array.splice(index, 1)
-              }
-          )
+        this.modalComfirm(item, index, array, this.realDeleteSecondary)
+      },
+
+      modalComfirm (item, index, array, func) {
+        this.$modal({
+            header: '提示',
+            message: '是否要删除该类型?',
+            footer: [
+                {type: 'ok', text: '确认', method: func, argu: [item, index, array]},
+                {type: 'cancel', text: '取消'}
+            ]
+        })
+      },
+
+      realDeleteSecondary (item) {
+        let self = this
+        self.$modal({
+            visible: false
+        })
+        courseTypeService.deleteClass(item[0].class_id).then(
+            (res) => {
+                self.hiddenLoading()
+                item[2].splice(item[1], 1)
+                self.$toast('成功删除该类型')
+            }, () => {
+                self.hiddenLoading()
+                self.$toast({message: '删除该类型失败', theme: 'error'})
+            }
+        )
       },
 
       editSecondary (item) {
@@ -130,7 +152,6 @@ export default {
               return
           }
           if (!item.children) {
-            //   item.children = []
               this.$set(item, 'children', [])
           }
           let thirdaryItem = Object.assign({}, this.thirdaryItem, {children: []})
@@ -139,11 +160,22 @@ export default {
       },
 
       deleteThird (item, index, array) {
+        this.modalComfirm(item, index, array, this.realDeleteThird)
+      },
+
+      realDeleteThird (item, index, array) {
         let self = this
-        courseTypeService.deleteCategory(item.category_id).then(
+        self.$modal({
+            visible: false
+        })
+        courseTypeService.deleteCategory(item[0].category_id).then(
             (res) => {
                 self.hiddenLoading()
-                array.splice(index, 1)
+                item[2].splice(item[1], 1)
+                self.$toast('成功删除该类型')
+            }, () => {
+                self.hiddenLoading()
+                self.$toast({message: '删除该类型失败', theme: 'error'})
             }
         )
       },
