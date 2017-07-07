@@ -1,10 +1,10 @@
 <template lang="pug">
-  div.Upload-container.dropzone(@drop.prevent="filechange")
-    label.uploader-label(for="uploader") {{tip}}
-    input.form-control#uploader(type="file" accept="video/*" @change="filechange")
+  div.Upload-container.dropzone(ref="box")
+    label.uploader-label(for="videoUploader") {{tip}}
+    input.form-control#videoUploader(type="file" accept="video/*" @change="filechange")
     div.message
         div.progress(v-if="percent" :style="{width: percent + '%'}")
-            span.error {{percent}}
+            //- span.error {{percent}}
 </template>
 <script>
 import courseService from '@/service/course.service'
@@ -17,7 +17,8 @@ export default {
         uploader: null,
         video_id: '',
         uploadedSize: '',
-        percent: 0
+        percent: 0,
+        err: ''
     }
   },
   methods: {
@@ -27,6 +28,27 @@ export default {
             return
         }
         this.initUploader(files)
+      },
+      preventDefaultEvent (eventName) {
+        document.addEventListener(eventName, function (e) {
+            e.preventDefault()
+        }, false)
+      },
+      addDropSupport () {
+          let Box = this.$refs.box
+          Box.addEventListener('drop', (e) => {
+              this.err = ''
+              let filelist = e.dataTransfer.files
+              if (!filelist.length) {
+                  return
+              }
+              // 格式限制
+            if (filelist[0].type.indexOf('video') === -1) {
+                this.errText = '请选择视频文件'
+                return false
+            }
+            this.initUploader(filelist)
+          })
       },
       emptyFile () {
           this.tip = '请点击选择或者把视频文件拖拽到此处'
@@ -42,12 +64,14 @@ export default {
                     // 开始上传
                     'onUploadstarted': function (uploadInfo) {
                     //   log("onUploadStarted:" + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object)
+                        // self.emptyFile()
                         uploader.setUploadAuthAndAddress(uploadInfo, res.upload_auth, res.upload_address)
                     },
                     // 文件上传成功
                     'onUploadSucceed': function (uploadInfo) {
                         self.hiddenLoading()
-                        self.emptyFile()
+                        self.tip += '  已经完成上传'
+                        self.percent = 0
                         self.$emit('getVideoId', self.video_id)
                         console.log("onUploadSucceed: " + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object)
                     },
@@ -104,6 +128,10 @@ export default {
     this.idProperty = this.random_string(6)
   },
   mounted () {
+      ['dragleave', 'drop', 'dragenter', 'dragover'].forEach(e => {
+          this.preventDefaultEvent(e)
+    })
+    this.addDropSupport()
   },
   computed: {
       ...mapGetters({
@@ -118,25 +146,30 @@ export default {
 <style lang="scss" scoped>
 .message {
     width: 100%;
+    min-height: 80px;
     margin: 15px 0;
     & > .progress {
         width: 100%;
         height: 25px;
         border-radius: 5px;
-        background: green;
+        position: relative;
+        top: 50px;
+        background: #ff9966;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #ff5e62, #ff9966);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #ff5e62, #ff9966); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
         transition: width 0.3s linear;
     }
 }
 .dropzone {
     padding: 0;
     & > .uploader-label {
-        width: 100%;
-        height: 100%;
-        padding: 20px;
-        cursor: pointer;
+        position: absolute;
+        top: 0;left: 0;right: 0;bottom: 0;
+        z-index: 10;
+        line-height: 100px;
     }
 }
-#uploader {
+#videoUploader {
     position: absolute;
     left: -9999px;
 }

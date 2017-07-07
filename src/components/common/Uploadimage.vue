@@ -124,6 +124,8 @@ export default {
         acceptedFiles: vm.acceptedFiles || 'image/*',
         maxFiles: 1,
         maxFilesize: 1024,
+        thumbnailWidth: 210,
+        thumbnailHeight: 120,
         dictDefaultMessage: '拖拽文件到此上传',
         init: function () {
             let myDropzone = this
